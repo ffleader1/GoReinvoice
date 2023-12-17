@@ -30,10 +30,9 @@ func GenPdf(input inputdata.PdfInput) {
 				}
 			}
 		}
-
-		if err := pdf.OutputFileAndClose("hello.pdf"); err != nil {
-			log.Fatal(err)
-		}
-
 	}
+	if err := pdf.OutputFileAndClose("hello.pdf"); err != nil {
+		log.Fatal(err)
+	}
+
 }
