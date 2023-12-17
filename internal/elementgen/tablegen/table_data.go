@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+const MergedCellNamePrefix = "+"
+
 type Column string
 
 var ErrInvalidCellToMerge = errors.New("invalid cell to merge")
@@ -58,6 +60,8 @@ type CornerAndEdgeInterface interface {
 	BottomLeftCorner() pointgen.Point
 	BottomRightCorner() pointgen.Point
 	CardinalString() string
+	HideEdge(edgeOption string)
+	MaxLineWidth() int
 }
 
 func (c *CellEdge) TopLeftCorner() pointgen.Point {
@@ -111,13 +115,24 @@ func (c *CellEdge) HideEdge(edgeOption string) {
 	}
 }
 
-//func (c CellEdge) TopEdgeInfo() (int, int, int, int) {
-//	topLeft := c.TopLeftCorner()
-//	bottomRight := c.BottomRightCorner()
-//	w := bottomRight.X - topLeft.X
-//	h := bottomRight.Y - topLeft.Y
-//	return topLeft.X, topLeft.Y, w, h
-//}
+func (c *CellEdge) MaxLineWidth() int {
+	maxWidth := 0
+	if maxWidth > c.TopEdge.Width {
+		maxWidth = c.TopEdge.Width
+	}
+	if maxWidth > c.BottomEdge.Width {
+		maxWidth = c.BottomEdge.Width
+	}
+	if maxWidth > c.LeftEdge.Width {
+		maxWidth = c.LeftEdge.Width
+	}
+	if maxWidth > c.RightEdge.Width {
+		maxWidth = c.RightEdge.Width
+	}
+
+	return maxWidth
+
+}
 
 func NewCellEdge(Ax, Ay, Cx, Cy, lineWidth int) CellEdge {
 	CornerA := pointgen.Point{
@@ -173,8 +188,7 @@ type SingleCell struct {
 	CellEdge
 }
 
-func NewCellAddress(col, row, x, y, w, h int) SingleCell {
-	lineWidth := 1
+func NewCellAddress(col, row, x, y, w, h, lineWidth int) SingleCell {
 	return SingleCell{
 		Column:   numberToColumn(col),
 		Row:      row,
@@ -193,7 +207,7 @@ type MergedCell struct {
 }
 
 func (mc MergedCell) Name() string {
-	return fmt.Sprintf("+%v%v", mc.Columns[0], mc.Rows[0])
+	return fmt.Sprintf("%v%v%v", MergedCellNamePrefix, mc.Columns[0], mc.Rows[0])
 }
 
 func (mc MergedCell) NameAllSingle() []string {
@@ -243,7 +257,12 @@ func NewMergedCell(CellTopLeft, CellBottomRight SingleCell) MergedCell {
 		rows = append(rows, i)
 	}
 
-	lineWidth := 1
+	lineWidth := CellTopLeft.MaxLineWidth()
+	brLineWidth := CellBottomRight.MaxLineWidth()
+
+	if lineWidth < brLineWidth {
+		lineWidth = brLineWidth
+	}
 	return MergedCell{
 		columns,
 		rows,
@@ -264,66 +283,104 @@ func (mc MergedCell) ContainCell(c SingleCell) bool {
 type TaggedUnionCell struct {
 	*SingleCell
 	*MergedCell
+	Text string
 	CornerAndEdgeInterface
 }
 
-func NewSingleTaggedUnionCell(col, row, x, y, w, h int) TaggedUnionCell {
-	single := NewCellAddress(col, row, x, y, w, h)
+func NewSingleTaggedUnionCell(col, row, x, y, w, h, lineWidth int) TaggedUnionCell {
+	single := NewCellAddress(col, row, x, y, w, h, lineWidth)
 	return TaggedUnionCell{
 		SingleCell: &single,
 		MergedCell: nil,
 	}
 }
 
-func (tuc TaggedUnionCell) Name() string {
+func (tuc *TaggedUnionCell) Name() string {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.Name()
 	}
 	return tuc.SingleCell.Name()
 }
 
-func (tuc TaggedUnionCell) CardinalString() string {
+func (tuc *TaggedUnionCell) CardinalString() string {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.CardinalString()
 	}
 	return tuc.SingleCell.CardinalString()
 }
 
-func (tuc TaggedUnionCell) TopLeftCorner() pointgen.Point {
+func (tuc *TaggedUnionCell) TopLeftCorner() pointgen.Point {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.TopLeftCorner()
 	}
 	return tuc.SingleCell.TopLeftCorner()
 }
 
-func (tuc TaggedUnionCell) TopRightCorner() pointgen.Point {
+func (tuc *TaggedUnionCell) TopRightCorner() pointgen.Point {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.TopRightCorner()
 	}
 	return tuc.SingleCell.TopRightCorner()
 }
 
-func (tuc TaggedUnionCell) BottomLeftCorner() pointgen.Point {
+func (tuc *TaggedUnionCell) BottomLeftCorner() pointgen.Point {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.BottomLeftCorner()
 	}
 	return tuc.SingleCell.BottomLeftCorner()
 }
 
-func (tuc TaggedUnionCell) BottomRightCorner() pointgen.Point {
+func (tuc *TaggedUnionCell) BottomRightCorner() pointgen.Point {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.BottomRightCorner()
 	}
 	return tuc.SingleCell.BottomRightCorner()
 }
 
+func (tuc *TaggedUnionCell) HideEdge(edgeOption string) {
+	if tuc.MergedCell != nil {
+		tuc.MergedCell.HideEdge(edgeOption)
+		return
+	}
+
+	tuc.SingleCell.HideEdge(edgeOption)
+}
+
+func (tuc *TaggedUnionCell) MaxLineWidth() int {
+	if tuc.MergedCell != nil {
+		return tuc.MergedCell.MaxLineWidth()
+	}
+
+	return tuc.SingleCell.MaxLineWidth()
+}
+
+func (tuc *TaggedUnionCell) WidthForFpdf() float64 {
+	topLeft := tuc.TopLeftCorner()
+	bottomRight := tuc.BottomRightCorner()
+	return float64(bottomRight.X - topLeft.X)
+}
+
+func (tuc *TaggedUnionCell) HeightForFpdf() float64 {
+	topLeft := tuc.TopLeftCorner()
+	bottomRight := tuc.BottomRightCorner()
+
+	line := 1
+	for _, r := range tuc.Text {
+		if r == '\n' {
+			line++
+		}
+	}
+
+	return float64(bottomRight.Y-topLeft.Y) / float64(line)
+}
+
 type CellMap map[string]TaggedUnionCell
 
-func MakeCellMap(XList, widths, YList, heights []int) CellMap {
+func MakeCellMap(XList, widths, YList, heights []int, lineWidth int) CellMap {
 	cm := make(map[string]TaggedUnionCell)
 	for i := 0; i < len(XList); i++ {
 		for j := 0; j < len(YList); j++ {
-			single := NewSingleTaggedUnionCell(i+1, j+1, XList[i], YList[j], widths[i], heights[j])
+			single := NewSingleTaggedUnionCell(i+1, j+1, XList[i], YList[j], widths[i], heights[j], lineWidth)
 			cm[single.Name()] = single
 		}
 	}
@@ -331,13 +388,6 @@ func MakeCellMap(XList, widths, YList, heights []int) CellMap {
 }
 
 func (cm CellMap) Merge(TopLeftName, BottomRightName string) error {
-	//alphaRegex := regexp.MustCompile("[a-zA-Z]+")
-	//numericRegex := regexp.MustCompile("[0-9]+")
-	//
-	//alphaPart := alphaRegex.FindString(TopLeftName)
-	//numericPart := numericRegex.FindString(TopLeftName)
-	//number, err := strconv.Atoi(numericPart)
-
 	topLeftCell := cm[TopLeftName]
 	bottomRightCell := cm[BottomRightName]
 	if topLeftCell.SingleCell == nil || bottomRightCell.SingleCell == nil {
@@ -357,4 +407,33 @@ func (cm CellMap) Merge(TopLeftName, BottomRightName string) error {
 	}
 
 	return nil
+}
+
+func (cm CellMap) HideEdge(cellName, edgeToHide string) {
+	var cellVal TaggedUnionCell
+
+	for k, v := range cm {
+		if k == cellName || k == MergedCellNamePrefix+cellName {
+			cellVal = v
+			break
+		}
+	}
+
+	cellVal.HideEdge(edgeToHide)
+
+	cm[cellVal.Name()] = cellVal
+}
+
+func (cm CellMap) AddText(cellName, textToAdd string) {
+	var cellVal TaggedUnionCell
+
+	for k, v := range cm {
+		if k == cellName || k == MergedCellNamePrefix+cellName {
+			cellVal = v
+			break
+		}
+	}
+
+	cellVal.Text = strings.TrimSpace(textToAdd)
+	cm[cellVal.Name()] = cellVal
 }

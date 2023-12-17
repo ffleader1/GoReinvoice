@@ -14,7 +14,7 @@ type TableLine struct {
 	Strokewidth int
 }
 
-func GenerateTableLine(x, y, width, height int, tableExtra inputdata.Table) (CellMap, error) {
+func GenerateCellMap(x, y, width, height, lineWidth int, tableExtra inputdata.Table) (CellMap, error) {
 	sumCol := .0
 	sumRow := .0
 
@@ -36,12 +36,20 @@ func GenerateTableLine(x, y, width, height int, tableExtra inputdata.Table) (Cel
 
 	yList, heights := genLocationAndLength(y, height, tableExtra.RowRatio)
 
-	cellMap := MakeCellMap(xList, widths, yList, heights)
+	cellMap := MakeCellMap(xList, widths, yList, heights, lineWidth)
 
 	for k, v := range tableExtra.MergeCell {
 		if err := cellMap.Merge(k, v); err != nil {
 			return nil, err
 		}
+	}
+
+	for k, v := range tableExtra.HiddenEdge {
+		cellMap.HideEdge(k, v)
+	}
+
+	for k, v := range tableExtra.CellText {
+		cellMap.AddText(k, v)
 	}
 
 	return cellMap, nil

@@ -70,4 +70,5 @@ type Table struct {
 	RowRatio    []float64         `json:"row_ratio"`
 	MergeCell   map[string]string `json:"merge_cell"`
 	HiddenEdge  map[string]string `json:"hidden_edge"`
+	CellText    map[string]string `json:"cell_text"`
 }
