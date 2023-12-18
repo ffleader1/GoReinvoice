@@ -1,15 +1,33 @@
 package utils
 
 import (
-	"fmt"
+	"log"
 	"testing"
 )
 
-func TestParseMarkdown(t *testing.T) {
-	input := "This is __not normal__ text. **This is bold text.**__This is italic text.__ Hello, world||123||!"
-	segments := ParseMarkdown(input)
+func TestIsRelativePath(t *testing.T) {
+	type testCase struct {
+		input  string
+		output bool
+	}
 
-	for _, segment := range segments {
-		fmt.Printf("Text: `%s`, Style: %s\n", segment.Text, segment.Style)
+	tests := map[string]testCase{
+		"case 1": {
+			"hello_world",
+			true,
+		},
+		"case 2": {
+			"C://Windows//hello_world",
+			false,
+		},
+		"case 3": {
+			"https://www.google.com",
+			false,
+		},
+	}
+	for tn, tc := range tests {
+		if out := IsRelativePath(tc.input); tc.output != out {
+			log.Fatalln("Error at testcase: ", tn, "Expect: ", tc.output, " - Got :", out)
+		}
 	}
 }

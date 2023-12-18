@@ -19,8 +19,8 @@ type Element struct {
 	Type            string        `json:"type"`
 	X               int           `json:"x"`
 	Y               int           `json:"y"`
-	Width           int           `json:"width"`
-	Height          int           `json:"height"`
+	Width           float64       `json:"width"`
+	Height          float64       `json:"height"`
 	Angle           int           `json:"angle"`
 	StrokeColor     string        `json:"strokeColor"`
 	BackgroundColor string        `json:"backgroundColor"`
