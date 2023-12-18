@@ -1,0 +1,148 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "id": "coral-logo1",
+      "type": "image",
+      "x": 15,
+      "y": 15,
+      "width": 40,
+      "height": 10,
+      "angle": 0,
+      "strokeColor": "transparent",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 64989413,
+      "version": 216,
+      "versionNonce": 1865200325,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1702549967000,
+      "link": null,
+      "locked": false,
+      "status": "saved",
+      "fileId": "1950fe4fd5928b4eafb6c79edad4fe2dbc462697",
+      "scale": [
+        1,
+        1
+      ]
+    }, {
+      "id": "befpDn9CLm08XKAkSU0Yk",
+      "type": "text",
+      "x": 15,
+      "y": 30,
+      "width": 91.05992126464844,
+      "height": 25,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 1897806315,
+      "version": 57,
+      "versionNonce": 689235813,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1702549967000,
+      "link": null,
+      "locked": false,
+      "text": "ใบนำฝากชำระเงิน (Bill Payment Pay-In Slip)",
+      "fontSize": 18,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "baseline": 18,
+      "containerId": "nBUn0MH4Coac8fw9wEFM-",
+      "originalText": "The Logo",
+      "lineHeight": 1.25
+    },
+    {
+      "id": "DIgNegUEX3-RZx7meFpkS",
+      "type": "text",
+      "x": 778,
+      "y": 415,
+      "width": 244.53125,
+      "height": 69,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 1511236683,
+      "version": 73,
+      "versionNonce": 2126811467,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1702550160670,
+      "link": null,
+      "locked": false,
+      "text": "I am just trying\nto write this text in multiples\nlines",
+      "fontSize": 20,
+      "fontFamily": 2,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 64,
+      "containerId": null,
+      "originalText": "I am just trying\nto write this text in multiples\nlines",
+      "lineHeight": 1.15
+    }
+  ],
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "files": {
+    "coral-logo1": {
+      "mimeType": "image/png",
+      "id": "pic1",
+      "dataURL": "coral_logo_black.png",
+      "created": 1702548227802,
+      "lastRetrieved": 1702548227802
+    },
+    "kbank-logo1": {
+      "mimeType": "image/png",
+      "id": "pic1",
+      "dataURL": "kbank_logo.png",
+      "created": 1702548227802,
+      "lastRetrieved": 1702548227802
+    }
+  },
+  "fonts": [
+    {
+      "familyName": "sarabun",
+      "style": "B",
+      "dataURL": "sarabun_bold.ttf"
+    },{
+      "familyName": "sarabun",
+      "style": "",
+      "dataURL": "sarabun_regular.ttf"
+    }
+
+  ],
+  "paper": {
+    "size": "A4",
+    "unit": "mm",
+    "orientation": "P"
+  }
+}
