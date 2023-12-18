@@ -10,6 +10,8 @@ type PdfInput struct {
 	AppState   AppState         `json:"appState"`
 	Files      map[string]File  `json:"files"`
 	Tables     map[string]Table `json:"tables"`
+	Fonts      []Font           `json:"fonts"`
+	Paper      Paper            `json:"paper"`
 }
 
 type Element struct {
@@ -66,9 +68,21 @@ type AppState struct {
 }
 
 type Table struct {
-	ColumnRatio []float64         `json:"column_ratio"`
-	RowRatio    []float64         `json:"row_ratio"`
-	MergeCell   map[string]string `json:"merge_cell"`
-	HiddenEdge  map[string]string `json:"hidden_edge"`
-	CellText    map[string]string `json:"cell_text"`
+	ColumnRatio []float64         `json:"columnRatio"`
+	RowRatio    []float64         `json:"rowRatio"`
+	MergeCell   map[string]string `json:"mergeCell"`
+	HiddenEdge  map[string]string `json:"hiddenEdge"`
+	CellText    map[string]string `json:"cellText"`
+}
+
+type Font struct {
+	FamilyName string `json:"familyName"`
+	Style      string `json:"style"`
+	DataURL    string `json:"dataURL"`
+}
+
+type Paper struct {
+	Size        string `json:"size"`
+	Unit        string `json:"unit"`
+	Orientation string `json:"orientation"`
 }

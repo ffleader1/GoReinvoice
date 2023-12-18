@@ -36,15 +36,3 @@ func TestNumberToColumn(t *testing.T) {
 		}
 	}
 }
-
-func TestCellGeneration(t *testing.T) {
-	type SingleCellData struct {
-		name       string
-		x, y, w, h int
-	}
-
-	type testCase struct {
-		input  int
-		output Column
-	}
-}
