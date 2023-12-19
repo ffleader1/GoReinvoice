@@ -6,6 +6,7 @@ type PdfInput struct {
 	Source     string           `json:"source"`
 	SourceSize string           `json:"source_size"`
 	Rotation   string           `json:"rotation"`
+	Resource   string           `json:"resource"`
 	Elements   []Element        `json:"elements"`
 	AppState   AppState         `json:"appState"`
 	Files      map[string]File  `json:"files"`

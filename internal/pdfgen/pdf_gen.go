@@ -2,6 +2,7 @@ package pdfgen
 
 import (
 	"GoReinvoice/internal/elementgen/tablegen"
+	"GoReinvoice/internal/elementgen/textgen"
 	"GoReinvoice/internal/inputdata"
 	"GoReinvoice/internal/utils"
 	"github.com/go-pdf/fpdf"
@@ -97,11 +98,16 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 			file := pd.pdfData.Files[e.ID]
 			pdf.Image(file.DataURL, float64(e.X), float64(e.Y), e.Width, e.Height, false, "", 0, "")
 		case "text":
-			pdf.SetXY(float64(e.X), float64(e.Y))
+			textObject := textgen.GenerateTextObject(e.X, e.Y, e.Width, e.Height, pd.fillPlaceHolder(e.Text, placeHolderMap), e.TextAlign, e.VerticalAlign, false)
+
 			font, style := pd.SwitchFont(e.FontFamily)
 			pdf.SetFont(font, style, float64(e.FontSize))
-			pdf.MultiCell(e.Width, e.Height, pd.fillPlaceHolder(e.Text, placeHolderMap), "",
-				"LT", false)
+
+			pdf.SetXY(float64(textObject.TopLeftCorner.X), float64(textObject.TopLeftCorner.Y))
+
+			pdf.MultiCell(textObject.WidthForFpdf(), textObject.HeightForFpdf(), textObject.Text, textObject.BorderString(),
+				textObject.AlignmentString(), false)
+
 		}
 	}
 

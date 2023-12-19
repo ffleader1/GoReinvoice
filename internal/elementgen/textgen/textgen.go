@@ -1,79 +1,56 @@
 package textgen
 
 import (
-	"slices"
-	"strings"
+	"GoReinvoice/internal/customtypes/direction"
+	"GoReinvoice/internal/elementgen/pointgen"
 )
 
-type TextStyle struct {
-	Text  string
-	Style string // 0: Normal, 1: Bold, 2: Italic
+type TextObject struct {
+	TopLeftCorner       pointgen.Point
+	Width               float64
+	Height              float64
+	Text                string
+	DisplayBorder       bool
+	HorizontalAlignment direction.HorizontalAlignment
+	VerticalAlignment   direction.VerticalAlignment
 }
 
-func ParseTextToComponents(text string) []TextStyle {
-
-	newStr, idxBold := replaceWithIndex(text, "**", "~~")
-	newStr2, idxItalic := replaceWithIndex(newStr, "__", "~~")
-	newStr3, idxItalicAndBold := replaceWithIndex(newStr2, "||", "~~")
-	newStr4, splitIdx := splitWithIndexes(newStr3, "~~")
-
-	ts := make([]TextStyle, 0)
-	for idx, n := range newStr4 {
-		if slices.Contains(idxBold, splitIdx[idx]) {
-			ts = append(ts, TextStyle{n, "B"})
-			continue
-		}
-		if slices.Contains(idxItalic, splitIdx[idx]) {
-			ts = append(ts, TextStyle{n, "I"})
-			continue
-		}
-		if slices.Contains(idxItalicAndBold, splitIdx[idx]) {
-			ts = append(ts, TextStyle{n, "BI"})
-			continue
-		}
-		ts = append(ts, TextStyle{n, ""})
+func GenerateTextObject(x, y int, width float64, height float64, text, hAlign, vAlign string, displayBorder bool) TextObject {
+	return TextObject{
+		TopLeftCorner: pointgen.Point{X: x,
+			Y: y},
+		Width:               width,
+		Height:              height,
+		Text:                text,
+		DisplayBorder:       displayBorder,
+		HorizontalAlignment: direction.ToHorizontalAlignment(hAlign),
+		VerticalAlignment:   direction.ToVerticalAlignment(vAlign),
 	}
-
-	return ts
-
-}
-func splitWithIndexes(str string, sep string) ([]string, []int) {
-	var parts []string
-	var indexes []int
-	startIndex := 0
-	for i := 0; i <= len(str)-len(sep); i++ {
-		if strings.Compare(str[i:i+len(sep)], sep) == 0 {
-			if startIndex < i {
-				parts = append(parts, str[startIndex:i])
-				indexes = append(indexes, startIndex)
-			}
-			startIndex = i + len(sep)
-		}
-	}
-	if startIndex < len(str) {
-		parts = append(parts, str[startIndex:])
-		indexes = append(indexes, startIndex)
-	}
-	return parts, indexes
 }
 
-func replaceWithIndex(s string, old, new string) (string, []int) {
-	var result string
-	var indexes []int
-	offset := 0
-	count := 0
-	for i := 0; i < len(s); i++ {
-		if strings.HasPrefix(s[i:], old) {
-			if count%2 == 0 {
-				indexes = append(indexes, i+len(new))
-			}
-			count++
-			result += new
-			i += len(new) - 1
-			offset += len(old)
-		} else {
-			result += string(s[i])
+func (to TextObject) AlignmentString() string {
+	return to.HorizontalAlignment.String() + to.VerticalAlignment.String()
+}
+
+func (to TextObject) WidthForFpdf() float64 {
+	return to.Width
+}
+
+func (to TextObject) HeightForFpdf() float64 {
+	line := 1
+	for _, r := range to.Text {
+		if r == '\n' {
+			line++
 		}
 	}
-	return result, indexes
+
+	return to.Height / float64(line)
+}
+
+func (to TextObject) BorderString() string {
+	if to.DisplayBorder {
+		return "BTLR"
+	}
+
+	return ""
 }

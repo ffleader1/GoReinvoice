@@ -21,6 +21,13 @@ func ReadData(jsonFile string) PdfInput {
 	}
 
 	dir := filepath.Dir(jsonFile)
+	if payload.Resource != "" {
+		if utils.IsRelativePath(payload.Resource) {
+			dir = filepath.Join(dir, payload.Resource)
+		} else {
+			dir = filepath.Dir(payload.Resource)
+		}
+	}
 
 	for k, v := range payload.Files {
 		if utils.IsRelativePath(v.DataURL) {

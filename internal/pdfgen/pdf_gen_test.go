@@ -112,7 +112,7 @@ func TestGenStringPdf(t *testing.T) {
 }
 
 func TestGenPdfFromFile(t *testing.T) {
-	input := inputdata.ReadData("../../resource/temp/resources/config.json")
+	input := inputdata.ReadData("../../resource/json/config.json")
 	pdfData := NewPdfData(input)
 	pdfData.GenPdf(nil, "test_gen_invoice.pdf")
 }

@@ -1,7 +1,7 @@
 package tablegen
 
 import (
-	"GoReinvoice/internal/customtypes/cardinal"
+	"GoReinvoice/internal/customtypes/direction"
 	"GoReinvoice/internal/elementgen/pointgen"
 	"errors"
 	"fmt"
@@ -83,34 +83,34 @@ func (c *CellEdge) BottomRightCorner() pointgen.Point {
 func (c *CellEdge) CardinalString() string {
 	str := ""
 	if c.TopEdge.IsShown() {
-		str += cardinal.Top.String()
+		str += direction.CardinalTop.String()
 	}
 	if c.BottomEdge.IsShown() {
-		str += cardinal.Bottom.String()
+		str += direction.CardinalBottom.String()
 	}
 	if c.LeftEdge.IsShown() {
-		str += cardinal.Left.String()
+		str += direction.CardinalLeft.String()
 	}
 	if c.RightEdge.IsShown() {
-		str += cardinal.Right.String()
+		str += direction.CardinalRight.String()
 	}
 	return str
 }
 
 func (c *CellEdge) HideEdge(edgeOption string) {
-	if cardinal.IsTop(edgeOption) {
+	if direction.IsCardinalTop(edgeOption) {
 		c.TopEdge.Hide()
 	}
 
-	if cardinal.IsBottom(edgeOption) {
+	if direction.IsCardinalBottom(edgeOption) {
 		c.BottomEdge.Hide()
 	}
 
-	if cardinal.IsLeft(edgeOption) {
+	if direction.IsCardinalLeft(edgeOption) {
 		c.LeftEdge.Hide()
 	}
 
-	if cardinal.IsRight(edgeOption) {
+	if direction.IsCardinalRight(edgeOption) {
 		c.RightEdge.Hide()
 	}
 }

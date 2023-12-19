@@ -2,6 +2,7 @@
   "type": "excalidraw",
   "version": 2,
   "source": "https://excalidraw.com",
+  "resource": "../temp/resources/",
   "elements": [
     {
       "id": "coral-logo1",
@@ -64,8 +65,8 @@
       "text": "ใบนำฝากชำระเงิน (Bill Payment Pay-In Slip)",
       "fontSize": 18,
       "fontFamily": 1,
-      "textAlign": "center",
-      "verticalAlign": "middle",
+      "textAlign": "left",
+      "verticalAlign": "top",
       "baseline": 18,
       "containerId": "nBUn0MH4Coac8fw9wEFM-",
       "originalText": "The Logo",
