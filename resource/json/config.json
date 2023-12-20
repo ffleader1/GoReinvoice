@@ -73,10 +73,10 @@
       "lineHeight": 1.25
     },
     {
-      "id": "DIgNegUEX3-RZx7meFpkS",
-      "type": "text",
-      "x": 778,
-      "y": 415,
+      "id": "tbarcode128-1",
+      "type": "code128",
+      "x": 70,
+      "y": 45,
       "width": 244.53125,
       "height": 69,
       "angle": 0,
@@ -98,7 +98,7 @@
       "updated": 1702550160670,
       "link": null,
       "locked": false,
-      "text": "I am just trying\nto write this text in multiples\nlines",
+      "text": "hai12345",
       "fontSize": 20,
       "fontFamily": 2,
       "textAlign": "left",

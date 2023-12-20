@@ -2,7 +2,7 @@ package textgen
 
 import (
 	"GoReinvoice/internal/customtypes/direction"
-	"GoReinvoice/internal/elementgen/pointgen"
+	"GoReinvoice/internal/elementgen/resuable/pointgen"
 )
 
 type TextObject struct {

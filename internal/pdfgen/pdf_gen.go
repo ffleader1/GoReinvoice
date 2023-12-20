@@ -1,6 +1,7 @@
 package pdfgen
 
 import (
+	"GoReinvoice/internal/elementgen/codegen"
 	"GoReinvoice/internal/elementgen/tablegen"
 	"GoReinvoice/internal/elementgen/textgen"
 	"GoReinvoice/internal/inputdata"
@@ -19,9 +20,10 @@ const arialFontPrefix = 1000
 const timesFontPrefix = 2000
 
 type PdfData struct {
-	pdf     *fpdf.Fpdf
-	pdfData inputdata.PdfInput
-	fonts   map[int]fontConfig
+	pdf                   *fpdf.Fpdf
+	pdfData               inputdata.PdfInput
+	pdfDefaultStrokeWidth float64
+	fonts                 map[int]fontConfig
 }
 
 func NewPdfData(pdfData inputdata.PdfInput) PdfData {
@@ -58,9 +60,10 @@ func NewPdfData(pdfData inputdata.PdfInput) PdfData {
 	pdf.AddPage()
 
 	return PdfData{
-		pdf:     pdf,
-		pdfData: pdfData,
-		fonts:   fontMap,
+		pdf:                   pdf,
+		pdfData:               pdfData,
+		pdfDefaultStrokeWidth: pdf.GetLineWidth(),
+		fonts:                 fontMap,
 	}
 }
 
@@ -108,6 +111,25 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 			pdf.MultiCell(textObject.WidthForFpdf(), textObject.HeightForFpdf(), textObject.Text, textObject.BorderString(),
 				textObject.AlignmentString(), false)
 
+		case "code128", "qrcode":
+			codeObject, err := codegen.GenerateCodeObject(e.Type, pd.fillPlaceHolder(e.Text, placeHolderMap))
+			if err != nil {
+				continue
+			}
+			options := fpdf.ImageOptions{
+				ReadDpi:   false,
+				ImageType: "png",
+			}
+			randName := utils.RandStringBytes(6)
+			pdf.RegisterImageOptionsReader(randName, options, &codeObject.Buffer)
+			pdf.Image(randName, float64(e.X), float64(e.Y), e.Width, e.Height, false, "", 0, "")
+		case "line":
+			startX := e.X + e.Point[0][0]
+			startY := e.Y + e.Point[0][1]
+			endX := e.X + e.Point[1][0]
+			endY := e.Y + e.Point[1][1]
+			pdf.SetLineWidth(pd.pdfDefaultStrokeWidth * float64(e.StrokeWidth))
+			pdf.Line(float64(startX), float64(startY), float64(endX), float64(endY))
 		}
 	}
 

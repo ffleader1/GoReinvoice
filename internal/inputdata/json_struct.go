@@ -53,6 +53,7 @@ type Element struct {
 	Status          string        `json:"status,omitempty"`
 	FileID          string        `json:"fileId,omitempty"`
 	Scale           []int         `json:"scale,omitempty"`
+	Point           [][]int       `json:"point,omitempty"`
 }
 
 type File struct {

@@ -2,7 +2,7 @@ package tablegen
 
 import (
 	"GoReinvoice/internal/customtypes/direction"
-	"GoReinvoice/internal/elementgen/pointgen"
+	"GoReinvoice/internal/elementgen/resuable/pointgen"
 	"errors"
 	"fmt"
 

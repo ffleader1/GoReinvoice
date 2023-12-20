@@ -2,9 +2,12 @@ package utils
 
 import (
 	"fmt"
+	"math/rand"
 	"path/filepath"
 	"strings"
 )
+
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 func GenerateFontStyleNum() map[int]string {
 	styleMap := make(map[int]string)
@@ -46,4 +49,12 @@ func GenerateFontStyleNum() map[int]string {
 
 func IsRelativePath(path string) bool {
 	return !filepath.IsAbs(path) && !strings.HasPrefix(path, "http://") && !strings.HasPrefix(path, "https://") && !strings.HasPrefix(path, "data:")
+}
+
+func RandStringBytes(n int) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	return string(b)
 }
