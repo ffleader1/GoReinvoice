@@ -115,7 +115,7 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 				continue
 			}
 			pdf.RegisterImageOptionsReader(imageObject.Name, imageObject.FpdfOption, &imageObject.Buffer)
-			pdf.Image(imageObject.Name, float64(imageObject.X), float64(imageObject.Y), e.Width, e.Height, false, "", 0, "")
+			pdf.Image(imageObject.Name, float64(imageObject.X), float64(imageObject.Y), imageObject.WidthForFpdf(), imageObject.HeightForFpdf(), false, "", 0, "")
 		case elem.Text:
 			textObject := textgen.GenerateTextObject(e.X, e.Y, e.Width, e.Height, pd.fillPlaceHolder(e.Text, placeHolderMap), e.TextAlign, e.VerticalAlign, false)
 

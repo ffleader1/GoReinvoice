@@ -36,16 +36,7 @@ func (to TextObject) WidthForFpdf() float64 {
 	return to.Width
 }
 
-func (to TextObject) HeightForFpdf() float64 {
-	line := 1
-	for _, r := range to.Text {
-		if r == '\n' {
-			line++
-		}
-	}
-
-	return to.Height / float64(line)
-}
+func (to TextObject) HeightForFpdf() float64 { return to.Height }
 
 func (to TextObject) BorderString() string {
 	if to.DisplayBorder {
