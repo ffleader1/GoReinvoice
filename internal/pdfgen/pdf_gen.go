@@ -26,6 +26,15 @@ type PdfData struct {
 	fonts                 map[int]fontConfig
 }
 
+func NewPdfDataFromFile(file string) (PdfData, error) {
+	input, err := inputdata.ReadData(file)
+	if err != nil {
+		return PdfData{}, err
+	}
+	pdfData := NewPdfData(input)
+	return pdfData, nil
+}
+
 func NewPdfData(pdfData inputdata.PdfInput) PdfData {
 	pdf := fpdf.New(pdfData.Paper.Orientation, pdfData.Paper.Unit, pdfData.Paper.Size, "")
 	var fontMap = make(map[int]fontConfig)
@@ -136,7 +145,6 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 	if err := pdf.OutputFileAndClose(outputFile); err != nil {
 		log.Fatal(err)
 	}
-
 }
 
 func (pd *PdfData) fillPlaceHolder(toFill string, placeHolderMap map[string]string) string {

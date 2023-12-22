@@ -3,24 +3,32 @@ package inputdata
 import (
 	"GoReinvoice/internal/utils"
 	"encoding/json"
-	"log"
+	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
-func ReadData(jsonFile string) PdfInput {
-	content, err := os.ReadFile(jsonFile)
+func ReadData(dataFile string) (PdfInput, error) {
+	content, err := os.ReadFile(dataFile)
 	if err != nil {
-		log.Fatal("Error when opening file: ", err)
+		return PdfInput{}, err
 	}
 
 	var payload PdfInput
-	err = json.Unmarshal(content, &payload)
-	if err != nil {
-		log.Fatal("Error during Unmarshal(): ", err)
+	if strings.HasSuffix(dataFile, ".json") {
+		err = json.Unmarshal(content, &payload)
+		if err != nil {
+			return PdfInput{}, err
+		}
+	} else {
+		err = yaml.Unmarshal(content, &payload)
+		if err != nil {
+			return PdfInput{}, err
+		}
 	}
 
-	dir := filepath.Dir(jsonFile)
+	dir := filepath.Dir(dataFile)
 	if payload.Resource != "" {
 		if utils.IsRelativePath(payload.Resource) {
 			dir = filepath.Join(dir, payload.Resource)
@@ -43,5 +51,5 @@ func ReadData(jsonFile string) PdfInput {
 		}
 	}
 
-	return payload
+	return payload, nil
 }
