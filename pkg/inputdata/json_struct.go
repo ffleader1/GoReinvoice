@@ -52,7 +52,7 @@ type Element struct {
 	LineHeight      float64       `json:"lineHeight,omitempty" yaml:"lineHeight,omitempty"`
 	Status          string        `json:"status,omitempty" yaml:"status,omitempty"`
 	FileID          string        `json:"fileId,omitempty" yaml:"fileId,omitempty"`
-	Scale           []int         `json:"scale,omitempty" yaml:"scale,omitempty"`
+	Scale           []float64     `json:"scale,omitempty" yaml:"scale,omitempty"`
 	Point           [][]int       `json:"point,omitempty" yaml:"point,omitempty"`
 }
 

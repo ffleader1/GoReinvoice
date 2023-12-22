@@ -1,6 +1,6 @@
 package pdfdata
 
-import "GoReinvoice/internal/pdfgen"
+import "github.com/ffleader1/GoReinvoice/pkg/pdfgen"
 
 type PDFData struct {
 	*pdfgen.PdfData

@@ -1,10 +1,10 @@
 package tablegen
 
 import (
-	"GoReinvoice/internal/customtypes/direction"
-	"GoReinvoice/internal/elementgen/resuable/pointgen"
 	"errors"
 	"fmt"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/direction"
+	"github.com/ffleader1/GoReinvoice/pkg/elementgen/resuable/pointgen"
 
 	"strings"
 )

@@ -1,8 +1,8 @@
 package inputdata
 
 import (
-	"GoReinvoice/internal/utils"
 	"encoding/json"
+	"github.com/ffleader1/GoReinvoice/pkg/utils"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"

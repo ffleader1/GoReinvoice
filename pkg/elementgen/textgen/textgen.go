@@ -1,8 +1,8 @@
 package textgen
 
 import (
-	"GoReinvoice/internal/customtypes/direction"
-	"GoReinvoice/internal/elementgen/resuable/pointgen"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/direction"
+	"github.com/ffleader1/GoReinvoice/pkg/elementgen/resuable/pointgen"
 )
 
 type TextObject struct {

@@ -1,11 +1,13 @@
 package pdfgen
 
 import (
-	"GoReinvoice/internal/elementgen/codegen"
-	"GoReinvoice/internal/elementgen/tablegen"
-	"GoReinvoice/internal/elementgen/textgen"
-	"GoReinvoice/internal/inputdata"
-	"GoReinvoice/internal/utils"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/elem"
+	"github.com/ffleader1/GoReinvoice/pkg/elementgen/codegen"
+	"github.com/ffleader1/GoReinvoice/pkg/elementgen/imagegen"
+	"github.com/ffleader1/GoReinvoice/pkg/elementgen/tablegen"
+	"github.com/ffleader1/GoReinvoice/pkg/elementgen/textgen"
+	"github.com/ffleader1/GoReinvoice/pkg/inputdata"
+	"github.com/ffleader1/GoReinvoice/pkg/utils"
 	"github.com/go-pdf/fpdf"
 	"log"
 	"strings"
@@ -90,8 +92,8 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 	pdf := *pd.pdf
 	for _, e := range pd.pdfData.Elements {
 
-		switch e.Type {
-		case "table":
+		switch elem.ToElemType(e.Type) {
+		case elem.Table:
 
 			tableData := pd.pdfData.Tables[e.ID]
 			mergedCell, err := tablegen.GenerateCellMap(e.X, e.Y, int(e.Width), int(e.Height), e.StrokeWidth, tableData)
@@ -106,10 +108,15 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 					"CM", false)
 			}
 
-		case "image":
+		case elem.Image:
 			file := pd.pdfData.Files[e.ID]
-			pdf.Image(file.DataURL, float64(e.X), float64(e.Y), e.Width, e.Height, false, "", 0, "")
-		case "text":
+			imageObject, err := imagegen.GenerateImageObject(file.DataURL, e.X, e.Y, e.Width, e.Height, e.Scale)
+			if err != nil {
+				continue
+			}
+			pdf.RegisterImageOptionsReader(imageObject.Name, imageObject.FpdfOption, &imageObject.Buffer)
+			pdf.Image(imageObject.Name, float64(imageObject.X), float64(imageObject.Y), e.Width, e.Height, false, "", 0, "")
+		case elem.Text:
 			textObject := textgen.GenerateTextObject(e.X, e.Y, e.Width, e.Height, pd.fillPlaceHolder(e.Text, placeHolderMap), e.TextAlign, e.VerticalAlign, false)
 
 			font, style := pd.SwitchFont(e.FontFamily)
@@ -120,19 +127,14 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 			pdf.MultiCell(textObject.WidthForFpdf(), textObject.HeightForFpdf(), textObject.Text, textObject.BorderString(),
 				textObject.AlignmentString(), false)
 
-		case "code128", "qrcode":
-			codeObject, err := codegen.GenerateCodeObject(e.Type, pd.fillPlaceHolder(e.Text, placeHolderMap))
+		case elem.Code128, elem.Qrcode:
+			codeObject, err := codegen.GenerateCodeObject(e.Type, pd.fillPlaceHolder(e.Text, placeHolderMap), e.X, e.Y)
 			if err != nil {
 				continue
 			}
-			options := fpdf.ImageOptions{
-				ReadDpi:   false,
-				ImageType: "png",
-			}
-			randName := utils.RandStringBytes(6)
-			pdf.RegisterImageOptionsReader(randName, options, &codeObject.Buffer)
-			pdf.Image(randName, float64(e.X), float64(e.Y), e.Width, e.Height, false, "", 0, "")
-		case "line":
+			pdf.RegisterImageOptionsReader(codeObject.Name, codeObject.FpdfOption, &codeObject.Buffer)
+			pdf.Image(codeObject.Name, float64(e.X), float64(e.Y), e.Width, e.Height, false, "", 0, "")
+		case elem.Line:
 			startX := e.X + e.Point[0][0]
 			startY := e.Y + e.Point[0][1]
 			endX := e.X + e.Point[1][0]

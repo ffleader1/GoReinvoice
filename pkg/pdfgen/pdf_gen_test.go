@@ -1,7 +1,7 @@
 package pdfgen
 
 import (
-	"GoReinvoice/internal/inputdata"
+	"github.com/ffleader1/GoReinvoice/pkg/inputdata"
 	"log"
 	"testing"
 )
@@ -186,12 +186,12 @@ func TestGenLinePdf(t *testing.T) {
 }
 
 func TestGenPdfFromFile(t *testing.T) {
-	//inputJson, err := inputdata.ReadData("../../resource/json/config.json")
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//pdfDataJson := NewPdfData(inputJson)
-	//pdfDataJson.GenPdf(nil, "test_gen_invoice_json.pdf")
+	inputJson, err := inputdata.ReadData("../../resource/json/config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	pdfDataJson := NewPdfData(inputJson)
+	pdfDataJson.GenPdf(nil, "test_gen_invoice_json.pdf")
 
 	inputYaml, err := inputdata.ReadData("../../resource/yaml/config.yaml")
 	if err != nil {

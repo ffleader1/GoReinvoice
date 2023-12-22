@@ -1,8 +1,8 @@
 package tablegen
 
 import (
-	"GoReinvoice/internal/inputdata"
 	"errors"
+	"github.com/ffleader1/GoReinvoice/pkg/inputdata"
 	"math"
 )
 
