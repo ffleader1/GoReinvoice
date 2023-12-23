@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/direction"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/textconfig"
 	"github.com/ffleader1/GoReinvoice/pkg/elementgen/resuable/pointgen"
-
 	"strings"
 )
 
@@ -283,7 +283,7 @@ func (mc MergedCell) ContainCell(c SingleCell) bool {
 type TaggedUnionCell struct {
 	*SingleCell
 	*MergedCell
-	Text string
+	textconfig.TextConfig
 	CornerAndEdgeInterface
 }
 
@@ -424,7 +424,7 @@ func (cm CellMap) HideEdge(cellName, edgeToHide string) {
 	cm[cellVal.Name()] = cellVal
 }
 
-func (cm CellMap) AddText(cellName, textToAdd string) {
+func (cm CellMap) AddTextConfig(cellName string, textConfigToAdd textconfig.TextConfig) {
 	var cellVal TaggedUnionCell
 
 	for k, v := range cm {
@@ -434,6 +434,6 @@ func (cm CellMap) AddText(cellName, textToAdd string) {
 		}
 	}
 
-	cellVal.Text = strings.TrimSpace(textToAdd)
+	cellVal.TextConfig = textConfigToAdd
 	cm[cellVal.Name()] = cellVal
 }

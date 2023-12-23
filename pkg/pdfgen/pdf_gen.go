@@ -12,7 +12,6 @@ import (
 	"github.com/ffleader1/GoReinvoice/pkg/utils"
 	"github.com/go-pdf/fpdf"
 	"log"
-	"strings"
 )
 
 type fontConfig struct {
@@ -96,7 +95,6 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 
 		switch elem.ToElemType(e.Type) {
 		case elem.Table:
-
 			tableData := pd.pdfData.Tables[e.ID]
 			mergedCell, err := tablegen.GenerateCellMap(e.X, e.Y, int(e.Width), int(e.Height), e.StrokeWidth, tableData)
 			if err != nil {
@@ -105,9 +103,12 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 			}
 			for _, cell := range mergedCell {
 				topLeft := cell.TopLeftCorner()
+				font, style := pd.SwitchFont(cell.FontFamily)
+				pdf.SetFont(font, style, float64(cell.FontSize))
+
 				pdf.SetXY(float64(topLeft.X), float64(topLeft.Y))
-				pdf.MultiCell(cell.WidthForFpdf(), cell.HeightForFpdf(), pd.fillPlaceHolder(cell.Text, placeHolderMap), cell.CardinalString(),
-					"CM", false)
+				pdf.MultiCell(cell.WidthForFpdf(), cell.HeightForFpdf(), cell.TextWithPlaceholder(placeHolderMap), cell.CardinalString(),
+					cell.AlignmentString(), false)
 			}
 
 		case elem.Image:
@@ -125,26 +126,27 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 			pdf.RegisterImageOptionsReader(imageObject.Name, imageObject.FpdfOption, &imageObject.Buffer)
 			pdf.Image(imageObject.Name, float64(imageObject.X), float64(imageObject.Y), imageObject.WidthForFpdf(), imageObject.HeightForFpdf(), false, "", 0, "")
 		case elem.Text:
-			textObject := textgen.GenerateTextObject(e.X, e.Y, e.Width, e.Height, pd.fillPlaceHolder(e.Text, placeHolderMap), e.TextAlign, e.VerticalAlign, false)
+			textObject := textgen.GenerateTextObject(e.X, e.Y, e.Width, e.Height, e.Text, e.FontSize, e.FontFamily, e.TextAlign, e.VerticalAlign, false)
 
-			font, style := pd.SwitchFont(e.FontFamily)
-			pdf.SetFont(font, style, float64(e.FontSize))
+			font, style := pd.SwitchFont(textObject.FontFamily)
+			pdf.SetFont(font, style, float64(textObject.FontSize))
 
 			pdf.SetXY(float64(textObject.TopLeftCorner.X), float64(textObject.TopLeftCorner.Y))
 
-			pdf.MultiCell(textObject.WidthForFpdf(), textObject.HeightForFpdf(), textObject.Text, textObject.BorderString(),
+			pdf.MultiCell(textObject.WidthForFpdf(), textObject.HeightForFpdf(), textObject.TextWithPlaceholder(placeHolderMap), textObject.BorderString(),
 				textObject.AlignmentString(), false)
 
 		case elem.Code128, elem.Qrcode:
-			codeObject, err := codegen.GenerateCodeObject(e.Type, pd.fillPlaceHolder(e.Text, placeHolderMap), e.X, e.Y)
+			codeObject, err := codegen.GenerateCodeObject(e.Type, e.Text, e.X, e.Y, placeHolderMap)
 			if err != nil {
 				continue
 			}
 			pdf.RegisterImageOptionsReader(codeObject.Name, codeObject.FpdfOption, &codeObject.Buffer)
 			pdf.Image(codeObject.Name, float64(e.X), float64(e.Y), e.Width, e.Height, false, "", 0, "")
 		case elem.Line:
-			lineObject, err := basicshapegen.GenerateLineObject(e.X, e.Y, e.Point, e.StrokeWidth, pd.pdfDefaultStrokeWidth)
+			lineObject, err := basicshapegen.GenerateLineObject(e.X, e.Y, e.Points, e.StrokeWidth, pd.pdfDefaultStrokeWidth)
 			if err != nil {
+				log.Println(err)
 				continue
 			}
 			pdf.SetLineWidth(lineObject.LineWidth)
@@ -159,15 +161,4 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 	if err := pdf.OutputFileAndClose(outputFile); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func (pd *PdfData) fillPlaceHolder(toFill string, placeHolderMap map[string]string) string {
-	for k, v := range placeHolderMap {
-		holder := "{{" + k + "}}"
-		if strings.Contains(toFill, holder) {
-			toFill = strings.ReplaceAll(toFill, holder, v)
-		}
-	}
-
-	return toFill
 }

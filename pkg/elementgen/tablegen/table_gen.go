@@ -2,6 +2,9 @@ package tablegen
 
 import (
 	"errors"
+	"fmt"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/direction"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/textconfig"
 	"github.com/ffleader1/GoReinvoice/pkg/inputdata"
 	"math"
 )
@@ -22,14 +25,14 @@ func GenerateCellMap(x, y, width, height, lineWidth int, tableExtra inputdata.Ta
 		sumCol += c
 	}
 	if sumCol != 1 {
-		return nil, ErrInvalidTableSize
+		return nil, fmt.Errorf("%w: Sum Colum Ratio Incorrect: %v, but expect 1", ErrInvalidTableSize, sumCol)
 	}
 
 	for _, r := range tableExtra.RowRatio {
 		sumRow += r
 	}
 	if sumRow != 1 {
-		return nil, ErrInvalidTableSize
+		return nil, fmt.Errorf("%w: Sum Row Ratio Incorrect: %v, but expect 1", ErrInvalidTableSize, sumRow)
 	}
 
 	xList, widths := genLocationAndLength(x, width, tableExtra.ColumnRatio)
@@ -49,7 +52,14 @@ func GenerateCellMap(x, y, width, height, lineWidth int, tableExtra inputdata.Ta
 	}
 
 	for k, v := range tableExtra.CellText {
-		cellMap.AddText(k, v)
+		tf := textconfig.TextConfig{
+			Text:                v.Text,
+			FontSize:            v.FontSize,
+			FontFamily:          v.FontFamily,
+			HorizontalAlignment: direction.ToHorizontalAlignment(v.TextAlign),
+			VerticalAlignment:   direction.ToVerticalAlignment(v.VerticalAlign),
+		}
+		cellMap.AddTextConfig(k, tf)
 	}
 
 	return cellMap, nil

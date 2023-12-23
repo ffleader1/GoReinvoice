@@ -41,19 +41,15 @@ type Element struct {
 	Updated         int64         `json:"updated" yaml:"updated"`
 	Link            interface{}   `json:"link" yaml:"link"`
 	Locked          bool          `json:"locked" yaml:"locked"`
-	Text            string        `json:"text,omitempty" yaml:"text"`
-	FontSize        int           `json:"fontSize,omitempty" yaml:"fontSize,omitempty"`
-	FontFamily      int           `json:"fontFamily,omitempty" yaml:"fontFamily,omitempty"`
-	TextAlign       string        `json:"textAlign,omitempty" yaml:"textAlign,omitempty"`
-	VerticalAlign   string        `json:"verticalAlign,omitempty" yaml:"verticalAlign,omitempty"`
-	Baseline        int           `json:"baseline,omitempty" yaml:"baseline,omitempty"`
-	ContainerID     string        `json:"containerId,omitempty" yaml:"containerId,omitempty"`
-	OriginalText    string        `json:"originalText,omitempty" yaml:"originalText,omitempty"`
-	LineHeight      float64       `json:"lineHeight,omitempty" yaml:"lineHeight,omitempty"`
-	Status          string        `json:"status,omitempty" yaml:"status,omitempty"`
-	FileID          string        `json:"fileId,omitempty" yaml:"fileId,omitempty"`
-	Scale           []float64     `json:"scale,omitempty" yaml:"scale,omitempty"`
-	Point           [][]int       `json:"point,omitempty" yaml:"point,omitempty"`
+	TextConfig      `yaml:",inline"`
+	Baseline        int       `json:"baseline,omitempty" yaml:"baseline,omitempty"`
+	ContainerID     string    `json:"containerId,omitempty" yaml:"containerId,omitempty"`
+	OriginalText    string    `json:"originalText,omitempty" yaml:"originalText,omitempty"`
+	LineHeight      float64   `json:"lineHeight,omitempty" yaml:"lineHeight,omitempty"`
+	Status          string    `json:"status,omitempty" yaml:"status,omitempty"`
+	FileID          string    `json:"fileId,omitempty" yaml:"fileId,omitempty"`
+	Scale           []float64 `json:"scale,omitempty" yaml:"scale,omitempty"`
+	Points          [][]int   `json:"points,omitempty" yaml:"points,omitempty"`
 }
 
 type File struct {
@@ -70,11 +66,19 @@ type AppState struct {
 }
 
 type Table struct {
-	ColumnRatio []float64         `json:"columnRatio" yaml:"columnRatio"`
-	RowRatio    []float64         `json:"rowRatio" yaml:"rowRatio"`
-	MergeCell   map[string]string `json:"mergeCell" yaml:"mergeCell"`
-	HiddenEdge  map[string]string `json:"hiddenEdge" yaml:"hiddenEdge"`
-	CellText    map[string]string `json:"cellText" yaml:"cellText"`
+	ColumnRatio []float64             `json:"columnRatio" yaml:"columnRatio"`
+	RowRatio    []float64             `json:"rowRatio" yaml:"rowRatio"`
+	MergeCell   map[string]string     `json:"mergeCell" yaml:"mergeCell"`
+	HiddenEdge  map[string]string     `json:"hiddenEdge" yaml:"hiddenEdge"`
+	CellText    map[string]TextConfig `json:"cellText" yaml:"cellText"`
+}
+
+type TextConfig struct {
+	Text          string `json:"text,omitempty" yaml:"text"`
+	FontSize      int    `json:"fontSize,omitempty" yaml:"fontSize,omitempty"`
+	FontFamily    int    `json:"fontFamily,omitempty" yaml:"fontFamily,omitempty"`
+	TextAlign     string `json:"textAlign,omitempty" yaml:"textAlign,omitempty"`
+	VerticalAlign string `json:"verticalAlign,omitempty" yaml:"verticalAlign,omitempty"`
 }
 
 type Font struct {
