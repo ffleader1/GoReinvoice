@@ -22,7 +22,7 @@ type Element struct {
 	Y               int           `json:"y" yaml:"y"`
 	Width           float64       `json:"width" yaml:"width"`
 	Height          float64       `json:"height" yaml:"height"`
-	Angle           int           `json:"angle" yaml:"angle"`
+	Angle           float64       `json:"angle" yaml:"angle"`
 	StrokeColor     string        `json:"strokeColor" yaml:"strokeColor"`
 	BackgroundColor string        `json:"backgroundColor" yaml:"backgroundColor"`
 	FillStyle       string        `json:"fillStyle" yaml:"fillStyle"`

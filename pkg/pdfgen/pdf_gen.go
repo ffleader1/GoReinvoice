@@ -2,6 +2,7 @@ package pdfgen
 
 import (
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/elem"
+	"github.com/ffleader1/GoReinvoice/pkg/elementgen/basicshapegen"
 	"github.com/ffleader1/GoReinvoice/pkg/elementgen/codegen"
 	"github.com/ffleader1/GoReinvoice/pkg/elementgen/imagegen"
 	"github.com/ffleader1/GoReinvoice/pkg/elementgen/tablegen"
@@ -135,12 +136,16 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 			pdf.RegisterImageOptionsReader(codeObject.Name, codeObject.FpdfOption, &codeObject.Buffer)
 			pdf.Image(codeObject.Name, float64(e.X), float64(e.Y), e.Width, e.Height, false, "", 0, "")
 		case elem.Line:
-			startX := e.X + e.Point[0][0]
-			startY := e.Y + e.Point[0][1]
-			endX := e.X + e.Point[1][0]
-			endY := e.Y + e.Point[1][1]
-			pdf.SetLineWidth(pd.pdfDefaultStrokeWidth * float64(e.StrokeWidth))
-			pdf.Line(float64(startX), float64(startY), float64(endX), float64(endY))
+			lineObject, err := basicshapegen.GenerateLineObject(e.X, e.Y, e.Point, e.StrokeWidth, pd.pdfDefaultStrokeWidth)
+			if err != nil {
+				continue
+			}
+			pdf.SetLineWidth(lineObject.LineWidth)
+			pdf.Line(lineObject.StartX, lineObject.StartY, lineObject.EndX, lineObject.EndY)
+		case elem.Ellipse:
+			ellipseObject := basicshapegen.GenerateEllipseObject(e.X, e.Y, e.Width, e.Height, e.StrokeWidth, pd.pdfDefaultStrokeWidth, e.Angle)
+			pdf.SetLineWidth(ellipseObject.LineWidth)
+			pdf.Ellipse(ellipseObject.X, ellipseObject.Y, ellipseObject.RHorizontal, ellipseObject.RVertical, ellipseObject.DegRotate, "D")
 		}
 	}
 

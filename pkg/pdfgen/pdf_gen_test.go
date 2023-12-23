@@ -143,7 +143,7 @@ func TestGenCodePdf(t *testing.T) {
 	pdfData.GenPdf(nil, "test_gen_code.pdf")
 }
 
-func TestGenLinePdf(t *testing.T) {
+func TestGenShapePdf(t *testing.T) {
 	input := inputdata.PdfInput{
 		Type:       "test",
 		Version:    0,
@@ -170,6 +170,16 @@ func TestGenLinePdf(t *testing.T) {
 					{0, 0}, {-10, 20},
 				},
 				StrokeWidth: 1,
+			},
+			{
+				ID:          "elm3",
+				Type:        "ellipse",
+				X:           35,
+				Y:           55,
+				Width:       20,
+				Height:      30,
+				Angle:       30,
+				StrokeWidth: 3,
 			},
 		},
 		AppState: inputdata.AppState{},
