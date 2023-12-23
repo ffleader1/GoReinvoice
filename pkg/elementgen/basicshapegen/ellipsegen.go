@@ -15,8 +15,8 @@ func GenerateEllipseObject(x, y int, width, height float64, strokeWidth int, def
 	return EllipseObject{
 		X:           XFpdf,
 		Y:           YFpdf,
-		RHorizontal: width,
-		RVertical:   height,
+		RHorizontal: width / 2,
+		RVertical:   height / 2,
 		LineWidth:   float64(strokeWidth) * defLineWidth,
 		DegRotate:   angle,
 	}
