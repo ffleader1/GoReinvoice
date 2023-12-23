@@ -1,6 +1,7 @@
 package pdfgen
 
 import (
+	"errors"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/elem"
 	"github.com/ffleader1/GoReinvoice/pkg/elementgen/basicshapegen"
 	"github.com/ffleader1/GoReinvoice/pkg/elementgen/codegen"
@@ -110,9 +111,15 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 			}
 
 		case elem.Image:
-			file := pd.pdfData.Files[e.ID]
+			var file inputdata.File
+			file, found := pd.pdfData.Files[e.ID]
+			if !found {
+				log.Println(errors.New("file config not found"))
+				continue
+			}
 			imageObject, err := imagegen.GenerateImageObject(file.DataURL, e.X, e.Y, e.Width, e.Height, e.Scale)
 			if err != nil {
+				log.Println(err)
 				continue
 			}
 			pdf.RegisterImageOptionsReader(imageObject.Name, imageObject.FpdfOption, &imageObject.Buffer)

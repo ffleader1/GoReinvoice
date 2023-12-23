@@ -33,7 +33,6 @@ func GenerateImageObject(imageUlr string, x, y int, width, height float64, scale
 		return ImageObject{}, err
 	}
 	defer file.Close()
-
 	img, _, err := image.Decode(file)
 	if err != nil {
 		return ImageObject{}, err

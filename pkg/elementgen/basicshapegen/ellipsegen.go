@@ -10,8 +10,8 @@ type EllipseObject struct {
 }
 
 func GenerateEllipseObject(x, y int, width, height float64, strokeWidth int, defLineWidth float64, angle float64) EllipseObject {
-	XFpdf := (float64(x) + width) / 2
-	YFpdf := (float64(y) + height) / 2
+	XFpdf := float64(x) + (width)/2
+	YFpdf := float64(y) + (height)/2
 	return EllipseObject{
 		X:           XFpdf,
 		Y:           YFpdf,
