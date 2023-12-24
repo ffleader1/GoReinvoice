@@ -197,26 +197,24 @@ func TestGenShapePdf(t *testing.T) {
 }
 
 func TestGenPdfFromFile(t *testing.T) {
+	phMap := map[string]string{
+		"user_name":      "occho 1",
+		"tax_id":         "taxid1234",
+		"invoice_suffix": "edv",
+		"total":          "10,000.00",
+		"total_price":    "1000000",
+	}
 	inputJson, err := inputdata.ReadData("../../resource/json/config.json")
 	if err != nil {
 		log.Fatal(err)
 	}
 	pdfDataJson := NewPdfData(inputJson)
-	pdfDataJson.GenPdf(nil, "test_gen_invoice_json.pdf")
+	pdfDataJson.GenPdf(phMap, "test_gen_invoice_json.pdf")
 
 	inputYaml, err := inputdata.ReadData("../../resource/yaml/config.yaml")
 	if err != nil {
 		log.Fatal(err)
 	}
 	pdfDataYaml := NewPdfData(inputYaml)
-	pdfDataYaml.GenPdf(map[string]string{
-		"ref1":            "occho 1",
-		"ref2":            "occho 2",
-		"tax_id":          "taxid1234",
-		"invoice_suffix":  "edv",
-		"payment_id":      "PMID1669692935128",
-		"order_number":    "7164cebfd3f06a6322eeeb6d",
-		"total_price_str": "10,000.00",
-		"total_price":     "1000000",
-	}, "test_gen_invoice_yaml.pdf")
+	pdfDataYaml.GenPdf(phMap, "test_gen_invoice_yaml.pdf")
 }

@@ -1,146 +1,150 @@
 {
-  "type": "excalidraw",
   "version": 2,
-  "source": "https://excalidraw.com",
-  "resource": "../temp/resources/",
+  "resource": "../",
   "elements": [
     {
-      "id": "coral-logo1",
+      "id": "1-logo",
       "type": "image",
-      "x": 15,
-      "y": 15,
-      "width": 40,
-      "height": 10,
-      "angle": 0,
-      "strokeColor": "transparent",
-      "backgroundColor": "transparent",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 1,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "roundness": null,
-      "seed": 64989413,
-      "version": 216,
-      "versionNonce": 1865200325,
-      "isDeleted": false,
-      "boundElements": null,
-      "updated": 1702549967000,
-      "link": null,
-      "locked": false,
-      "status": "saved",
-      "fileId": "1950fe4fd5928b4eafb6c79edad4fe2dbc462697",
+      "x": 17,
+      "y": 12,
+      "width": 300,
+      "height": 80,
       "scale": [
-        1,
-        1
+        0.12,
+        0.12
       ]
-    }, {
-      "id": "befpDn9CLm08XKAkSU0Yk",
-      "type": "text",
-      "x": 15,
-      "y": 30,
-      "width": 91.05992126464844,
-      "height": 25,
-      "angle": 0,
-      "strokeColor": "#1e1e1e",
-      "backgroundColor": "transparent",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 1,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "roundness": null,
-      "seed": 1897806315,
-      "version": 57,
-      "versionNonce": 689235813,
-      "isDeleted": false,
-      "boundElements": null,
-      "updated": 1702549967000,
-      "link": null,
-      "locked": false,
-      "text": "ใบนำฝากชำระเงิน (Bill Payment Pay-In Slip)",
-      "fontSize": 18,
-      "fontFamily": 1,
-      "textAlign": "left",
-      "verticalAlign": "top",
-      "baseline": 18,
-      "containerId": "nBUn0MH4Coac8fw9wEFM-",
-      "originalText": "The Logo",
-      "lineHeight": 1.25
     },
     {
-      "id": "tbarcode128-1",
-      "type": "code128",
-      "x": 70,
-      "y": 45,
-      "width": 244.53125,
-      "height": 69,
-      "angle": 0,
-      "strokeColor": "#1e1e1e",
-      "backgroundColor": "transparent",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 1,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "roundness": null,
-      "seed": 1511236683,
-      "version": 73,
-      "versionNonce": 2126811467,
-      "isDeleted": false,
-      "boundElements": null,
-      "updated": 1702550160670,
-      "link": null,
-      "locked": false,
-      "text": "hai12345",
-      "fontSize": 20,
-      "fontFamily": 2,
+      "id": "2-text",
+      "type": "text",
+      "x": 17,
+      "y": 27,
+      "width": 100,
+      "height": 25,
+      "text": "Bill Payment for {{user_name}}",
+      "fontSize": 14,
+      "fontFamily": 1,
       "textAlign": "left",
-      "verticalAlign": "top",
-      "baseline": 64,
-      "containerId": null,
-      "originalText": "I am just trying\nto write this text in multiples\nlines",
-      "lineHeight": 1.15
+      "verticalAlign": "top"
+    },
+    {
+      "id": "3-ellipse",
+      "type": "ellipse",
+      "x": 19,
+      "y": 77,
+      "width": 4,
+      "height": 4,
+      "angle": 0,
+      "strokeWidth": 2
+    },
+    {
+      "id": "4-table",
+      "type": "table",
+      "x": 19,
+      "y": 83,
+      "width": 180,
+      "height": 30
+    },
+    {
+      "id": "5-code128",
+      "type": "code128",
+      "x": 110,
+      "y": 117,
+      "width": 89,
+      "height": 10,
+      "text": "|{{tax_id}}\n{{invoice_suffix}}\n{{total_price}}"
+    },
+    {
+      "id": "6-qrcode",
+      "type": "qrcode",
+      "x": 110,
+      "y": 117,
+      "width": 60,
+      "height": 60,
+      "text": "|{{tax_id}}\n{{invoice_suffix}}\n{{total_price}}"
+    },
+    {
+      "id": "7-line",
+      "type": "line",
+      "x": 18,
+      "y": 143,
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          180,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "8-copy",
+      "type": "copy",
+      "x": 0,
+      "y": 135
     }
   ],
-  "appState": {
-    "gridSize": null,
-    "viewBackgroundColor": "#ffffff"
+  "tables": {
+    "4-table": {
+      "columnRatio": [
+        0.3,
+        0.2,
+        0.5
+      ],
+      "rowRatio": [
+        0.4,
+        0.3,
+        0.3
+      ],
+      "mergeCell": {
+        "A2": "B3"
+      },
+      "hiddenEdge": {
+        "A2": "LB"
+      },
+      "cellText": {
+        "A1": {
+          "text": "Name",
+          "fontFamily": 1,
+          "fontSize": 14,
+          "textAlign": "left",
+          "verticalAlign": "top"
+        },
+        "C3": {
+          "text": "{{total}}",
+          "fontFamily": 1,
+          "fontSize": 14
+        }
+      }
+    }
   },
   "files": {
-    "coral-logo1": {
-      "mimeType": "image/png",
-      "id": "pic1",
-      "dataURL": "coral_logo_black.png",
-      "created": 1702548227802,
-      "lastRetrieved": 1702548227802
-    },
-    "kbank-logo1": {
-      "mimeType": "image/png",
-      "id": "pic1",
-      "dataURL": "kbank_logo.png",
-      "created": 1702548227802,
-      "lastRetrieved": 1702548227802
+    "1-logo": {
+      "dataURL": "image/go_rust.png"
     }
   },
   "fonts": [
     {
       "familyName": "sarabun",
       "style": "B",
-      "dataURL": "sarabun_bold.ttf"
-    },{
+      "dataURL": "font/sarabun_bold.ttf"
+    },
+    {
       "familyName": "sarabun",
       "style": "",
-      "dataURL": "sarabun_regular.ttf"
+      "dataURL": "font/sarabun_regular.ttf"
     }
-
   ],
+  "copies": {
+    "8-copy": [
+      "1-logo",
+      "2-text",
+      "3-ellipse"
+    ]
+  },
   "paper": {
     "size": "A4",
     "unit": "mm",

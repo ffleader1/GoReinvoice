@@ -350,8 +350,9 @@ func (tuc TaggedUnionCell) HideEdge(edgeOption string) TaggedUnionCell {
 		tuc.MergedCell.CellEdge = tuc.MergedCell.HideEdge(edgeOption)
 		return tuc
 	}
-
-	tuc.SingleCell.CellEdge = tuc.SingleCell.HideEdge(edgeOption)
+	if tuc.SingleCell != nil {
+		tuc.SingleCell.CellEdge = tuc.SingleCell.HideEdge(edgeOption)
+	}
 	return tuc
 }
 

@@ -1,9 +1,12 @@
 package textconfig
 
 import (
+	"fmt"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/direction"
 	"strings"
 )
+
+const textPlaceHolder = "{{%s}}"
 
 type TextConfig struct {
 	Text                string
@@ -19,7 +22,7 @@ func (tc TextConfig) AlignmentString() string {
 
 func (tc TextConfig) TextWithPlaceholder(placeHolderMap map[string]string) string {
 	for k, v := range placeHolderMap {
-		holder := "{{" + k + "}}"
+		holder := fmt.Sprintf(textPlaceHolder, k)
 		if strings.Contains(tc.Text, holder) {
 			tc.Text = strings.ReplaceAll(tc.Text, holder, v)
 		}
