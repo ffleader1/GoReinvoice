@@ -6,10 +6,11 @@ import (
 )
 
 type LineObject struct {
+	ID string
 	fpdfpoint.Line
 }
 
-func GenerateLineObject(x, y float64, point [][]float64, strokeWidth float64, defLineWidth float64) (LineObject, error) {
+func GenerateLineObject(id string, x, y float64, point [][]float64, strokeWidth float64, defLineWidth float64) (LineObject, error) {
 	if len(point) != 2 {
 		return LineObject{}, errors.New("invalid points length")
 	}
@@ -19,6 +20,7 @@ func GenerateLineObject(x, y float64, point [][]float64, strokeWidth float64, de
 	endY := y + point[1][1]
 
 	return LineObject{
+		ID: id,
 		Line: fpdfpoint.Line{
 			A: fpdfpoint.Point{
 				X: startX,
@@ -35,5 +37,6 @@ func GenerateLineObject(x, y float64, point [][]float64, strokeWidth float64, de
 }
 
 func (lo LineObject) Translation(x, y float64) LineObject {
-	return LineObject{lo.Line.Translation(x, y)}
+	lo.Line = lo.Line.Translation(x, y)
+	return lo
 }

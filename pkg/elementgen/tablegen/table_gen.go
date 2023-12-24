@@ -17,7 +17,7 @@ type TableLine struct {
 	Strokewidth int
 }
 
-func GenerateCellMap(x, y, width, height, lineWidth float64, tableExtra inputdata.Table) (CellMap, error) {
+func GenerateTableObject(id string, x, y, width, height, lineWidth float64, tableExtra inputdata.Table) (TableObject, error) {
 	sumCol := .0
 	sumRow := .0
 
@@ -25,25 +25,25 @@ func GenerateCellMap(x, y, width, height, lineWidth float64, tableExtra inputdat
 		sumCol += c
 	}
 	if sumCol != 1 {
-		return nil, fmt.Errorf("%w: Sum Colum Ratio Incorrect: %v, but expect 1", ErrInvalidTableSize, sumCol)
+		return TableObject{}, fmt.Errorf("%w: Sum Colum Ratio Incorrect: %v, but expect 1", ErrInvalidTableSize, sumCol)
 	}
 
 	for _, r := range tableExtra.RowRatio {
 		sumRow += r
 	}
 	if sumRow != 1 {
-		return nil, fmt.Errorf("%w: Sum Row Ratio Incorrect: %v, but expect 1", ErrInvalidTableSize, sumRow)
+		return TableObject{}, fmt.Errorf("%w: Sum Row Ratio Incorrect: %v, but expect 1", ErrInvalidTableSize, sumRow)
 	}
 
 	xList, widths := genLocationAndLength(x, width, tableExtra.ColumnRatio)
 
 	yList, heights := genLocationAndLength(y, height, tableExtra.RowRatio)
 
-	cellMap := MakeCellMap(xList, widths, yList, heights, lineWidth)
+	cellMap := MakeTableObject(id, xList, widths, yList, heights, lineWidth)
 
 	for k, v := range tableExtra.MergeCell {
 		if err := cellMap.Merge(k, v); err != nil {
-			return nil, err
+			return TableObject{}, err
 		}
 	}
 

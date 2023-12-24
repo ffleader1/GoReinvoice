@@ -3,6 +3,7 @@ package basicshapegen
 import "github.com/ffleader1/GoReinvoice/pkg/customtypes/fpdfpoint"
 
 type EllipseObject struct {
+	ID string
 	fpdfpoint.Point
 	RHorizontal float64
 	RVertical   float64
@@ -10,10 +11,11 @@ type EllipseObject struct {
 	DegRotate   float64
 }
 
-func GenerateEllipseObject(x, y, width, height, strokeWidth float64, defLineWidth float64, angle float64) EllipseObject {
+func GenerateEllipseObject(id string, x, y, width, height, strokeWidth float64, defLineWidth float64, angle float64) EllipseObject {
 	XFpdf := x + (width)/2
 	YFpdf := y + (height)/2
 	return EllipseObject{
+		ID: id,
 		Point: fpdfpoint.Point{
 			X: XFpdf,
 			Y: YFpdf},

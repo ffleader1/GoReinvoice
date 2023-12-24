@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/fpdfpoint"
-	"github.com/ffleader1/GoReinvoice/pkg/utils"
 	"github.com/go-pdf/fpdf"
 	"image"
 	"image/jpeg"
@@ -15,7 +14,7 @@ import (
 )
 
 type ImageObject struct {
-	Name       string
+	ID         string
 	FpdfOption fpdf.ImageOptions
 	Buffer     bytes.Buffer
 	fpdfpoint.Point
@@ -25,7 +24,7 @@ type ImageObject struct {
 	DefaultScaleHeight float64
 }
 
-func GenerateImageObject(imageUlr string, x, y, width, height float64, scale []float64) (ImageObject, error) {
+func GenerateImageObject(id string, imageUlr string, x, y, width, height float64, scale []float64) (ImageObject, error) {
 	var option fpdf.ImageOptions
 
 	file, err := os.Open(imageUlr)
@@ -58,7 +57,7 @@ func GenerateImageObject(imageUlr string, x, y, width, height float64, scale []f
 		return ImageObject{}, fmt.Errorf("invalid scale")
 	}
 	return ImageObject{
-		Name:       utils.RandStringBytes(6),
+		ID:         id,
 		FpdfOption: option,
 		Buffer:     buf,
 		Point: fpdfpoint.Point{

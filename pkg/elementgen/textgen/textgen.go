@@ -7,6 +7,7 @@ import (
 )
 
 type TextObject struct {
+	ID            string
 	TopLeftCorner fpdfpoint.Point
 	Width         float64
 	Height        float64
@@ -14,8 +15,9 @@ type TextObject struct {
 	textconfig.TextConfig
 }
 
-func GenerateTextObject(x, y, width, height float64, text string, fontSize, fontFamily int, hAlign, vAlign string, displayBorder bool) TextObject {
+func GenerateTextObject(id string, x, y, width, height float64, text string, fontSize, fontFamily int, hAlign, vAlign string, displayBorder bool) TextObject {
 	return TextObject{
+		ID: id,
 		TopLeftCorner: fpdfpoint.Point{X: x,
 			Y: y},
 		Width:         width,

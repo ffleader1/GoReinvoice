@@ -385,13 +385,14 @@ func (tuc TaggedUnionCell) HeightForFpdf() float64 {
 	return (bottomRight.Y - topLeft.Y) / float64(line)
 }
 
-//	type TableObject struct {
-//		ID string
-//		CellMap map[string]TaggedUnionCell
-//	}
-type CellMap map[string]TaggedUnionCell
+type TableObject struct {
+	ID      string
+	CellMap map[string]TaggedUnionCell
+}
 
-func MakeCellMap(XList, widths, YList, heights []float64, lineWidth float64) CellMap {
+//type CellMap map[string]TaggedUnionCell
+
+func MakeTableObject(id string, XList, widths, YList, heights []float64, lineWidth float64) TableObject {
 	cm := make(map[string]TaggedUnionCell)
 	for i := 0; i < len(XList); i++ {
 		for j := 0; j < len(YList); j++ {
@@ -399,12 +400,12 @@ func MakeCellMap(XList, widths, YList, heights []float64, lineWidth float64) Cel
 			cm[single.Name()] = single
 		}
 	}
-	return cm
+	return TableObject{id, cm}
 }
 
-func (cm CellMap) Merge(TopLeftName, BottomRightName string) error {
-	topLeftCell := cm[TopLeftName]
-	bottomRightCell := cm[BottomRightName]
+func (to TableObject) Merge(TopLeftName, BottomRightName string) error {
+	topLeftCell := to.CellMap[TopLeftName]
+	bottomRightCell := to.CellMap[BottomRightName]
 	if topLeftCell.SingleCell == nil || bottomRightCell.SingleCell == nil {
 		return ErrInvalidCellToMerge
 	}
@@ -412,22 +413,22 @@ func (cm CellMap) Merge(TopLeftName, BottomRightName string) error {
 	mCell := NewMergedCell(*topLeftCell.SingleCell, *bottomRightCell.SingleCell)
 	singleCellNames := mCell.NameAllSingle()
 
-	cm[mCell.Name()] = TaggedUnionCell{
+	to.CellMap[mCell.Name()] = TaggedUnionCell{
 		SingleCell: nil,
 		MergedCell: &mCell,
 	}
 
 	for _, n := range singleCellNames {
-		delete(cm, n)
+		delete(to.CellMap, n)
 	}
 
 	return nil
 }
 
-func (cm CellMap) HideEdge(cellName, edgeToHide string) {
+func (to TableObject) HideEdge(cellName, edgeToHide string) {
 	var cellVal TaggedUnionCell
 
-	for k, v := range cm {
+	for k, v := range to.CellMap {
 		if k == cellName || k == MergedCellNamePrefix+cellName {
 			cellVal = v
 			break
@@ -436,13 +437,13 @@ func (cm CellMap) HideEdge(cellName, edgeToHide string) {
 
 	cellVal = cellVal.HideEdge(edgeToHide)
 
-	cm[cellVal.Name()] = cellVal
+	to.CellMap[cellVal.Name()] = cellVal
 }
 
-func (cm CellMap) Translation(x, y float64) CellMap {
+func (to TableObject) Translation(x, y float64) TableObject {
 	ncm := make(map[string]TaggedUnionCell)
 
-	for k, tuc := range cm {
+	for k, tuc := range to.CellMap {
 		if tuc.MergedCell != nil {
 			tuc.MergedCell.CellEdge = tuc.MergedCell.Translation(x, y)
 			ncm[k] = tuc
@@ -453,13 +454,13 @@ func (cm CellMap) Translation(x, y float64) CellMap {
 		ncm[k] = tuc
 	}
 
-	return ncm
+	return to
 }
 
-func (cm CellMap) AddTextConfig(cellName string, textConfigToAdd textconfig.TextConfig) {
+func (to TableObject) AddTextConfig(cellName string, textConfigToAdd textconfig.TextConfig) {
 	var cellVal TaggedUnionCell
 
-	for k, v := range cm {
+	for k, v := range to.CellMap {
 		if k == cellName || k == MergedCellNamePrefix+cellName {
 			cellVal = v
 			break
@@ -467,5 +468,5 @@ func (cm CellMap) AddTextConfig(cellName string, textConfigToAdd textconfig.Text
 	}
 
 	cellVal.TextConfig = textConfigToAdd
-	cm[cellVal.Name()] = cellVal
+	to.CellMap[cellVal.Name()] = cellVal
 }

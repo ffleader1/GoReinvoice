@@ -2,8 +2,6 @@ package codegen
 
 import (
 	"bytes"
-	"crypto/sha256"
-	"fmt"
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/code128"
 	"github.com/boombuler/barcode/qr"
@@ -15,14 +13,14 @@ import (
 )
 
 type CodeObject struct {
-	Name       string
+	ID         string
 	Content    string
 	FpdfOption fpdf.ImageOptions
 	Buffer     bytes.Buffer
 	fpdfpoint.Point
 }
 
-func GenerateCodeObject(codeType string, data string, x, y float64, placeHolderMap map[string]string) (CodeObject, error) {
+func GenerateCodeObject(id string, codeType string, data string, x, y float64, placeHolderMap map[string]string) (CodeObject, error) {
 	var qrCode barcode.Barcode
 	var err error
 	textCfg := textconfig.TextConfig{
@@ -52,9 +50,8 @@ func GenerateCodeObject(codeType string, data string, x, y float64, placeHolderM
 	if err = png.Encode(&buffer, qrCode); err != nil {
 		return CodeObject{}, err
 	}
-	shaHash := sha256.Sum256([]byte(replacedData))
 
-	return CodeObject{Name: fmt.Sprintf("%x.png", shaHash),
+	return CodeObject{ID: id,
 		Content: replacedData,
 		FpdfOption: fpdf.ImageOptions{
 			ReadDpi:   false,
