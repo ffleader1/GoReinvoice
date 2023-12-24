@@ -3,6 +3,7 @@ package imagegen
 import (
 	"bytes"
 	"fmt"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/customerr"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/fpdfpoint"
 	"github.com/go-pdf/fpdf"
 	"image"
@@ -47,14 +48,14 @@ func GenerateImageObject(id string, imageUlr string, x, y, width, height float64
 	case "png":
 		err = png.Encode(&buf, img)
 	default:
-		return ImageObject{}, fmt.Errorf("unsupported image format: %s", ext)
+		return ImageObject{}, fmt.Errorf("%w: %s", customerr.ErrUnsupportedImageFormat, ext)
 	}
 	if err != nil {
 		return ImageObject{}, err
 	}
 
 	if len(scale) != 2 {
-		return ImageObject{}, fmt.Errorf("invalid scale")
+		return ImageObject{}, customerr.ErrInvalidScaleData
 	}
 	return ImageObject{
 		ID:         id,

@@ -1,8 +1,8 @@
 package tablegen
 
 import (
-	"errors"
 	"fmt"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/customerr"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/direction"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/fpdfpoint"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/textconfig"
@@ -12,8 +12,6 @@ import (
 const MergedCellNamePrefix = "+"
 
 type Column string
-
-var ErrInvalidCellToMerge = errors.New("invalid cell to merge")
 
 func numberToColumn(num int) Column {
 	if num <= 0 {
@@ -407,7 +405,7 @@ func (to TableObject) Merge(TopLeftName, BottomRightName string) error {
 	topLeftCell := to.CellMap[TopLeftName]
 	bottomRightCell := to.CellMap[BottomRightName]
 	if topLeftCell.SingleCell == nil || bottomRightCell.SingleCell == nil {
-		return ErrInvalidCellToMerge
+		return customerr.ErrInvalidCellToMerge
 	}
 
 	mCell := NewMergedCell(*topLeftCell.SingleCell, *bottomRightCell.SingleCell)

@@ -11,6 +11,7 @@ const Code128 ElType = "code128"
 const Qrcode ElType = "qrcode"
 const Line ElType = "line"
 const Ellipse ElType = "ellipse"
+const Copy ElType = "copy"
 
 func (et ElType) String() string {
 	return string(et)
@@ -33,6 +34,8 @@ func ToElemType(str string) ElType {
 		return Line
 	case Ellipse.String():
 		return Ellipse
+	case Copy.String():
+		return Copy
 	}
 	return ""
 }

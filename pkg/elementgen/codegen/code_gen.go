@@ -18,9 +18,11 @@ type CodeObject struct {
 	FpdfOption fpdf.ImageOptions
 	Buffer     bytes.Buffer
 	fpdfpoint.Point
+	Width  float64
+	Height float64
 }
 
-func GenerateCodeObject(id string, codeType string, data string, x, y float64, placeHolderMap map[string]string) (CodeObject, error) {
+func GenerateCodeObject(id string, codeType string, data string, x, y, w, h float64, placeHolderMap map[string]string) (CodeObject, error) {
 	var qrCode barcode.Barcode
 	var err error
 	textCfg := textconfig.TextConfig{
@@ -62,6 +64,8 @@ func GenerateCodeObject(id string, codeType string, data string, x, y float64, p
 			X: x,
 			Y: y,
 		},
+		Width:  w,
+		Height: h,
 	}, nil
 }
 

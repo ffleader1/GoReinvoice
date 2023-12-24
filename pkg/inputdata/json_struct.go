@@ -1,18 +1,19 @@
 package inputdata
 
 type PdfInput struct {
-	Type       string           `json:"type" yaml:"type"`
-	Version    int              `json:"version" yaml:"version"`
-	Source     string           `json:"source" yaml:"source"`
-	SourceSize string           `json:"source_size" yaml:"source_size"`
-	Rotation   string           `json:"rotation" yaml:"rotation"`
-	Resource   string           `json:"resource" yaml:"resource"`
-	Elements   []Element        `json:"elements" yaml:"elements"`
-	AppState   AppState         `json:"appState" yaml:"appState"`
-	Files      map[string]File  `json:"files" yaml:"files"`
-	Tables     map[string]Table `json:"tables" yaml:"tables"`
-	Fonts      []Font           `json:"fonts" yaml:"fonts"`
-	Paper      Paper            `json:"paper" yaml:"paper"`
+	Type       string              `json:"type" yaml:"type"`
+	Version    int                 `json:"version" yaml:"version"`
+	Source     string              `json:"source" yaml:"source"`
+	SourceSize string              `json:"source_size" yaml:"source_size"`
+	Rotation   string              `json:"rotation" yaml:"rotation"`
+	Resource   string              `json:"resource" yaml:"resource"`
+	Elements   []Element           `json:"elements" yaml:"elements"`
+	AppState   AppState            `json:"appState" yaml:"appState"`
+	Files      map[string]File     `json:"files" yaml:"files"`
+	Tables     map[string]Table    `json:"tables" yaml:"tables"`
+	Fonts      []Font              `json:"fonts" yaml:"fonts"`
+	Paper      Paper               `json:"paper" yaml:"paper"`
+	Copies     map[string][]string `json:"copies" yaml:"copies"`
 }
 
 type Element struct {

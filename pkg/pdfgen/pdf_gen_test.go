@@ -157,7 +157,7 @@ func TestGenShapePdf(t *testing.T) {
 				Type: "line",
 				X:    25,
 				Y:    30,
-				Points: [][]int{
+				Points: [][]float64{
 					{0, 0}, {-10, 20},
 				},
 				StrokeWidth: 4,
@@ -167,7 +167,7 @@ func TestGenShapePdf(t *testing.T) {
 				Type: "line",
 				X:    35,
 				Y:    40,
-				Points: [][]int{
+				Points: [][]float64{
 					{0, 0}, {-10, 20},
 				},
 				StrokeWidth: 1,

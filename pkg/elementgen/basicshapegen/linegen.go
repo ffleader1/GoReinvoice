@@ -1,7 +1,7 @@
 package basicshapegen
 
 import (
-	"errors"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/customerr"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/fpdfpoint"
 )
 
@@ -12,8 +12,9 @@ type LineObject struct {
 
 func GenerateLineObject(id string, x, y float64, point [][]float64, strokeWidth float64, defLineWidth float64) (LineObject, error) {
 	if len(point) != 2 {
-		return LineObject{}, errors.New("invalid points length")
+		return LineObject{}, customerr.ErrInvalidPointsLength
 	}
+
 	startX := x + point[0][0]
 	startY := y + point[0][1]
 	endX := x + point[1][0]

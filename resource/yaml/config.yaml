@@ -1,117 +1,263 @@
-type: excalidraw
 version: 2
-source: https://excalidraw.com
 resource: "../temp/resources/"
 elements:
-  - id: coral-logo1
+  - id: 1-logo
     type: image
-    x: 15
-    y: 15
-    width: 40
-    height: 10
-    angle: 0
-    strokeColor: transparent
-    backgroundColor: transparent
-    fillStyle: solid
-    strokeWidth: 2
-    strokeStyle: solid
-    roughness: 1
-    opacity: 100
-    groupIds: []
-    frameId:
-    roundness:
-    seed: 64989413
-    version: 216
-    versionNonce: 1865200325
-    isDeleted: false
-    boundElements:
-    updated: 1702549967000
-    link:
-    locked: false
-    status: saved
-    fileId: 1950fe4fd5928b4eafb6c79edad4fe2dbc462697
+    x: 17
+    y: 12
+    width: 300
+    height: 80
     scale:
-      - 1
-      - 1
-  - id: befpDn9CLm08XKAkSU0Yk
+      - 0.12
+      - 0.12
+  - id: 2-text
     type: text
-    x: 15
-    y: 30
-    width: 91.05992126464844
+    x: 17
+    y: 27
+    width: 100
     height: 25
-    angle: 0
-    strokeColor: "#1e1e1e"
-    backgroundColor: transparent
-    fillStyle: solid
-    strokeWidth: 2
-    strokeStyle: solid
-    roughness: 1
-    opacity: 100
-    groupIds: []
-    frameId:
-    roundness:
-    seed: 1897806315
-    version: 57
-    versionNonce: 689235813
-    isDeleted: false
-    boundElements:
-    updated: 1702549967000
-    link:
-    locked: false
     text: ใบนำฝากชำระเงิน (Bill Payment Pay-In Slip)
-    fontSize: 18
+    fontSize: 14
     fontFamily: 1
     textAlign: left
     verticalAlign: top
-    baseline: 18
-    containerId: nBUn0MH4Coac8fw9wEFM-
-    originalText: The Logo
-    lineHeight: 1.25
-  - id: tbarcode128-1
-    type: code128
-    x: 70
-    y: 45
-    width: 244.53125
-    height: 69
-    angle: 0
-    strokeColor: "#1e1e1e"
-    backgroundColor: transparent
-    fillStyle: solid
-    strokeWidth: 2
-    strokeStyle: solid
-    roughness: 1
-    opacity: 100
-    groupIds: []
-    frameId:
-    roundness:
-    seed: 1511236683
-    version: 73
-    versionNonce: 2126811467
-    isDeleted: false
-    boundElements:
-    updated: 1702550160670
-    link:
-    locked: false
-    text: hai12345
-    fontSize: 20
+  - id: 3-text
+    type: text
+    x: 17
+    y: 32
+    width: 100
+    height: 5
+    text: |-
+      บริษัท กสิกร โกลบอล เพย์เมนต์ จำกัด
+      ที่อยู่ 87/1 อาคารแคปปิตอลทาวเวอร์ ออลซีซั่นส์เพลส
+      ชั้นที่ 10 ห้องเลขที่ S10029 ถนนวิทยุ แขวงลุมพินี
+      เขตปทุมวัน กรุงเทพมหานคร 10330
+      เลขประจำตัวผู้เสียภาษี {{tax_id}}
+    fontSize: 14
     fontFamily: 2
     textAlign: left
     verticalAlign: top
-    baseline: 64
-    containerId:
-    originalText: |-
-      I am just trying
-      to write this text in multiples
-      lines
-    lineHeight: 1.15
+  - id: 4-text
+    type: text
+    x: 50
+    y: 12
+    width: 147
+    height: 5
+    text: |-
+      Payment ID: {{payment_id}}
+      Order Number: {{order_number}}
+    fontSize: 14
+    fontFamily: 2
+    textAlign: right
+    verticalAlign: top
+  - id: 5-text
+    type: text
+    x: 147
+    y: 27
+    width: 140
+    height: 5
+    text: สําหรับธนาคาร
+    fontSize: 14
+    fontFamily: 1
+    textAlign: left
+    verticalAlign: top
+  - id: 6-text
+    type: text
+    x: 122
+    y: 32
+    width: 140
+    height: 5
+    text: |-
+      สาขาผู้ฝาก/Branch.............................................
+      วันที่/Date.........................................................
+      ชื่อลูกค้า (Name)   
+      รหัสลูกค้า (Ref.1)  
+      รหัสลูกค้า (Ref.2)  
+      Tel.
+    fontSize: 14
+    fontFamily: 1
+    textAlign: left
+    verticalAlign: top
+  - id: 7-text
+    type: text
+    x: 132
+    y: 42
+    width: 140
+    height: 5
+    text:
+      "                 {{name}}\n                 {{ref1}}\n                  {{ref2}}\n     {{phone}}"
+    fontSize: 14
+    fontFamily: 2
+    textAlign: left
+    verticalAlign: top
+  - id: 8-text
+    type: text
+    x: 17
+    y: 71
+    width: 140
+    height: 5
+    text: "เพื่อเข้าบัญชี บริษัท กสิกร โกลบอล เพย์เมนต์ จำกัด\n             บมจ. ธนาคารกสิกรไทย เลขที่บัญชี ${XXX-X-6304X-X} (Com Code {{comp_code}})"
+    fontSize: 14
+    fontFamily: 1
+    textAlign: left
+    verticalAlign: top
+  - id: 9-ellipse
+    type: ellipse
+    x: 19
+    y: 77
+    width: 4
+    height: 4
+    angle: 0
+    strokeWidth: 2
+  - id: 10-logo
+    type: image
+    x: 25
+    y: 76
+    width: 55
+    height: 55
+    scale:
+      - 0.1
+      - 0.
+  - id: 11-table
+    type: table
+    x: 19
+    y: 83
+    width: 180
+    height: 30
+  - id: 12-ellipse
+    type: ellipse
+    x: 20
+    y: 89
+    width: 2.3
+    height: 2.3
+    angle: 0
+    strokeWidth: 2
+  - id: 13-ellipse
+    type: ellipse
+    x: 33
+    y: 89
+    width: 2.3
+    height: 2.3
+    angle: 0
+    strokeWidth: 2
+  - id: 14-code128
+    type: code128
+    x: 110
+    y: 117
+    width: 89
+    height: 10
+    text: "|{{tax_id}}{{invoice_suffix}}\n{{ref1}}\n{{ref2}}\n{{total_price}}"
+  - id: 15-text
+    type: text
+    x: 118
+    y: 127
+    width: 140
+    height: 5
+    text: "| {{tax_id}}{{invoice_suffix}} {{ref1}} {{ref2}} {{total_price}}"
+    fontSize: 9
+    fontFamily: 2
+    textAlign: left
+    verticalAlign: top
+  - id: 16-text
+    type: text
+    x: 40
+    y: 134
+    width: 200
+    height: 5
+    text: "เพื่อความสะดวกของท่าน กรุณานำใบแจ้งการชำระเงินพร้อมใบแจ้งหนี้ไปชำระได้ที่ ธ.กสิกรไทย ทุกสาขาทั่วประเทศ"
+    fontSize: 13
+    fontFamily: 1
+    textAlign: left
+    verticalAlign: top
+  - id: 17-line
+    type: line
+    x: 18
+    y: 143
+    strokeWidth: 2
+    points:
+      - - 0
+        - 0
+      - - 180
+        - 0
+  - id: 18-copy
+    type: copy
+    x: 0
+    y: 135
 appState:
   gridSize:
   viewBackgroundColor: "#ffffff"
+tables:
+  11-table:
+    columnRatio:
+      - 0.14
+      - 0.125
+      - 0.125
+      - 0.2
+      - 0.175
+      - 0.235
+    rowRatio:
+      - 0.18
+      - 0.18
+      - 0.18
+      - 0.46
+    mergeCell:
+      A4: D4
+      E4: F4
+    hiddenEdge:
+      A4: LB
+    cellText:
+      A1:
+        text: รายการ
+        fontFamily: 1
+        fontSize: 14
+      B1:
+        text: ธนาคาร/Bank
+        fontFamily: 1
+        fontSize: 14
+      C1:
+        text: สาขา/Branch
+        fontFamily: 1
+        fontSize: 14
+      D1:
+        text: เลขที่เช็ค/Cheque No.
+        fontFamily: 1
+        fontSize: 14
+      E1:
+        text: เช็คลงวันที่/Date
+        fontFamily: 1
+        fontSize: 14
+      F1:
+        text: จำนวนเงิน(บาท)/Amount
+        fontFamily: 1
+        fontSize: 14
+      A2:
+        text:  เงินสด    เช็ค
+        fontFamily: 1
+        fontSize: 14
+      F2:
+        text: "{{total_price_str}}"
+        fontFamily: 1
+        fontSize: 14
+      A4:
+        text: "ชื่อผู้นำฝาก/Deposit by........................................ โทร./Tel........................"
+        fontFamily: 1
+        fontSize: 14
+        verticalAlign: bottom
+      E4:
+        text: "สำหรับเจ้าหน้าที่ธนาคาร\nผู้รับเงิน............................................................"
+        fontFamily: 1
+        fontSize: 14
 files:
-  coral-logo1:
+  1-logo:
     mimeType: image/png
     id: pic1
     dataURL: coral_logo_black.png
+    created: 1702548227802
+    lastRetrieved: 1702548227802
+  10-logo:
+    mimeType: image/png
+    id: pic2
+    dataURL: kbank_logo.png
     created: 1702548227802
     lastRetrieved: 1702548227802
   kbank-logo1:
@@ -125,8 +271,26 @@ fonts:
     style: B
     dataURL: sarabun_bold.ttf
   - familyName: sarabun
-    style: ''
+    style: ""
     dataURL: sarabun_regular.ttf
+copies:
+  18-copy:
+    - 1-logo
+    - 2-text
+    - 3-text
+    - 4-text
+    - 5-text
+    - 6-text
+    - 7-text
+    - 8-text
+    - 9-ellipse
+    - 10-logo
+    - 11-table
+    - 12-ellipse
+    - 13-ellipse
+    - 14-code128
+    - 15-text
+    - 16-text
 paper:
   size: A4
   unit: mm
