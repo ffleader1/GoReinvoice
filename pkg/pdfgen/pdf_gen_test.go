@@ -209,5 +209,14 @@ func TestGenPdfFromFile(t *testing.T) {
 		log.Fatal(err)
 	}
 	pdfDataYaml := NewPdfData(inputYaml)
-	pdfDataYaml.GenPdf(nil, "test_gen_invoice_yaml.pdf")
+	pdfDataYaml.GenPdf(map[string]string{
+		"ref1":            "occho 1",
+		"ref2":            "occho 2",
+		"tax_id":          "taxid1234",
+		"invoice_suffix":  "edv",
+		"payment_id":      "PMID1669692935128",
+		"order_number":    "7164cebfd3f06a6322eeeb6d",
+		"total_price_str": "10,000.00",
+		"total_price":     "1000000",
+	}, "test_gen_invoice_yaml.pdf")
 }
