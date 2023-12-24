@@ -1,6 +1,7 @@
 package pdfgen
 
 import (
+	"bytes"
 	"errors"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/elem"
 	"github.com/ffleader1/GoReinvoice/pkg/elementgen/basicshapegen"
@@ -101,6 +102,20 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 		log.Fatal(err)
 	}
 }
+func (pd *PdfData) GenPdfBuffer(placeHolderMap map[string]string) bytes.Buffer {
+
+	//pdf.AddUTF8Font()
+	var buf bytes.Buffer
+	pdf := *pd.pdf
+	for _, e := range pd.pdfData.Elements {
+		pd.GenElement(&pdf, elem.ToElemType(e.Type), false, &e, nil, placeHolderMap)
+	}
+
+	pdf.Output(&buf)
+
+	return buf
+}
+
 func (pd *PdfData) GenElement(pdf *fpdf.Fpdf, elType elem.ElType, copying bool, e *inputdata.Element, data interface{}, placeHolderMap map[string]string) {
 	var err error
 	switch elType {
