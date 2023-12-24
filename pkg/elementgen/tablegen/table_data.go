@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/direction"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/fpdfpoint"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/textconfig"
-	"github.com/ffleader1/GoReinvoice/pkg/elementgen/resuable/pointgen"
 	"strings"
 )
 
@@ -47,40 +47,41 @@ func (c Column) int() int {
 }
 
 type CellEdge struct {
-	TopEdge    pointgen.Line
-	BottomEdge pointgen.Line
-	LeftEdge   pointgen.Line
-	RightEdge  pointgen.Line
+	TopEdge    fpdfpoint.Line
+	BottomEdge fpdfpoint.Line
+	LeftEdge   fpdfpoint.Line
+	RightEdge  fpdfpoint.Line
 	CornerAndEdgeInterface
 }
 
 type CornerAndEdgeInterface interface {
-	TopLeftCorner() pointgen.Point
-	TopRightCorner() pointgen.Point
-	BottomLeftCorner() pointgen.Point
-	BottomRightCorner() pointgen.Point
+	TopLeftCorner() fpdfpoint.Point
+	TopRightCorner() fpdfpoint.Point
+	BottomLeftCorner() fpdfpoint.Point
+	BottomRightCorner() fpdfpoint.Point
 	CardinalString() string
-	HideEdge(edgeOption string)
+	HideEdge(edgeOption string) CellEdge
+	Translation(x, y float64) CellEdge
 	MaxLineWidth() int
 }
 
-func (c *CellEdge) TopLeftCorner() pointgen.Point {
+func (c CellEdge) TopLeftCorner() fpdfpoint.Point {
 	return c.TopEdge.A
 }
 
-func (c *CellEdge) TopRightCorner() pointgen.Point {
+func (c CellEdge) TopRightCorner() fpdfpoint.Point {
 	return c.TopEdge.B
 }
 
-func (c *CellEdge) BottomLeftCorner() pointgen.Point {
+func (c CellEdge) BottomLeftCorner() fpdfpoint.Point {
 	return c.BottomEdge.A
 }
 
-func (c *CellEdge) BottomRightCorner() pointgen.Point {
+func (c CellEdge) BottomRightCorner() fpdfpoint.Point {
 	return c.BottomEdge.B
 }
 
-func (c *CellEdge) CardinalString() string {
+func (c CellEdge) CardinalString() string {
 	str := ""
 	if c.TopEdge.IsShown() {
 		str += direction.CardinalTop.String()
@@ -97,26 +98,36 @@ func (c *CellEdge) CardinalString() string {
 	return str
 }
 
-func (c *CellEdge) HideEdge(edgeOption string) {
+func (c CellEdge) HideEdge(edgeOption string) CellEdge {
 	if direction.IsCardinalTop(edgeOption) {
-		c.TopEdge.Hide()
+		c.TopEdge = c.TopEdge.Hide()
 	}
 
 	if direction.IsCardinalBottom(edgeOption) {
-		c.BottomEdge.Hide()
+		c.BottomEdge = c.BottomEdge.Hide()
 	}
 
 	if direction.IsCardinalLeft(edgeOption) {
-		c.LeftEdge.Hide()
+		c.LeftEdge = c.LeftEdge.Hide()
 	}
 
 	if direction.IsCardinalRight(edgeOption) {
-		c.RightEdge.Hide()
+		c.RightEdge = c.RightEdge.Hide()
 	}
+
+	return c
 }
 
-func (c *CellEdge) MaxLineWidth() int {
-	maxWidth := 0
+func (c CellEdge) Translation(x, y float64) CellEdge {
+	c.TopEdge = c.TopEdge.Translation(x, y)
+	c.BottomEdge = c.BottomEdge.Translation(x, y)
+	c.LeftEdge = c.LeftEdge.Translation(x, y)
+	c.RightEdge = c.RightEdge.Translation(x, y)
+	return c
+}
+
+func (c CellEdge) MaxLineWidth() float64 {
+	maxWidth := 0.0
 	if maxWidth > c.TopEdge.Width {
 		maxWidth = c.TopEdge.Width
 	}
@@ -131,53 +142,52 @@ func (c *CellEdge) MaxLineWidth() int {
 	}
 
 	return maxWidth
-
 }
 
-func NewCellEdge(Ax, Ay, Cx, Cy, lineWidth int) CellEdge {
-	CornerA := pointgen.Point{
+func NewCellEdge(Ax, Ay, Cx, Cy, lineWidth float64) CellEdge {
+	CornerA := fpdfpoint.Point{
 		X: Ax,
 		Y: Ay,
 	}
 
-	CornerB := pointgen.Point{
+	CornerB := fpdfpoint.Point{
 		X: Cx,
 		Y: Ay,
 	}
 
-	CornerC := pointgen.Point{
+	CornerC := fpdfpoint.Point{
 		X: Cx,
 		Y: Cy,
 	}
 
-	CornerD := pointgen.Point{
+	CornerD := fpdfpoint.Point{
 		X: Ax,
 		Y: Cy,
 	}
 	return CellEdge{
-		TopEdge: pointgen.Line{
+		TopEdge: fpdfpoint.Line{
 			A:      CornerA,
 			B:      CornerB,
 			Width:  lineWidth,
-			Status: pointgen.Visible,
+			Status: fpdfpoint.Visible,
 		},
-		RightEdge: pointgen.Line{
+		RightEdge: fpdfpoint.Line{
 			A:      CornerB,
 			B:      CornerC,
 			Width:  lineWidth,
-			Status: pointgen.Visible,
+			Status: fpdfpoint.Visible,
 		},
-		BottomEdge: pointgen.Line{
+		BottomEdge: fpdfpoint.Line{
 			A:      CornerD,
 			B:      CornerC,
 			Width:  lineWidth,
-			Status: pointgen.Visible,
+			Status: fpdfpoint.Visible,
 		},
-		LeftEdge: pointgen.Line{
+		LeftEdge: fpdfpoint.Line{
 			A:      CornerA,
 			B:      CornerD,
 			Width:  lineWidth,
-			Status: pointgen.Visible,
+			Status: fpdfpoint.Visible,
 		},
 	}
 }
@@ -188,7 +198,7 @@ type SingleCell struct {
 	CellEdge
 }
 
-func NewCellAddress(col, row, x, y, w, h, lineWidth int) SingleCell {
+func NewCellAddress(col, row int, x, y, w, h, lineWidth float64) SingleCell {
 	return SingleCell{
 		Column:   numberToColumn(col),
 		Row:      row,
@@ -287,7 +297,7 @@ type TaggedUnionCell struct {
 	CornerAndEdgeInterface
 }
 
-func NewSingleTaggedUnionCell(col, row, x, y, w, h, lineWidth int) TaggedUnionCell {
+func NewSingleTaggedUnionCell(col, row int, x, y, w, h, lineWidth float64) TaggedUnionCell {
 	single := NewCellAddress(col, row, x, y, w, h, lineWidth)
 	return TaggedUnionCell{
 		SingleCell: &single,
@@ -295,58 +305,59 @@ func NewSingleTaggedUnionCell(col, row, x, y, w, h, lineWidth int) TaggedUnionCe
 	}
 }
 
-func (tuc *TaggedUnionCell) Name() string {
+func (tuc TaggedUnionCell) Name() string {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.Name()
 	}
 	return tuc.SingleCell.Name()
 }
 
-func (tuc *TaggedUnionCell) CardinalString() string {
+func (tuc TaggedUnionCell) CardinalString() string {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.CardinalString()
 	}
 	return tuc.SingleCell.CardinalString()
 }
 
-func (tuc *TaggedUnionCell) TopLeftCorner() pointgen.Point {
+func (tuc TaggedUnionCell) TopLeftCorner() fpdfpoint.Point {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.TopLeftCorner()
 	}
 	return tuc.SingleCell.TopLeftCorner()
 }
 
-func (tuc *TaggedUnionCell) TopRightCorner() pointgen.Point {
+func (tuc TaggedUnionCell) TopRightCorner() fpdfpoint.Point {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.TopRightCorner()
 	}
 	return tuc.SingleCell.TopRightCorner()
 }
 
-func (tuc *TaggedUnionCell) BottomLeftCorner() pointgen.Point {
+func (tuc TaggedUnionCell) BottomLeftCorner() fpdfpoint.Point {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.BottomLeftCorner()
 	}
 	return tuc.SingleCell.BottomLeftCorner()
 }
 
-func (tuc *TaggedUnionCell) BottomRightCorner() pointgen.Point {
+func (tuc TaggedUnionCell) BottomRightCorner() fpdfpoint.Point {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.BottomRightCorner()
 	}
 	return tuc.SingleCell.BottomRightCorner()
 }
 
-func (tuc *TaggedUnionCell) HideEdge(edgeOption string) {
+func (tuc TaggedUnionCell) HideEdge(edgeOption string) TaggedUnionCell {
 	if tuc.MergedCell != nil {
-		tuc.MergedCell.HideEdge(edgeOption)
-		return
+		tuc.MergedCell.CellEdge = tuc.MergedCell.HideEdge(edgeOption)
+		return tuc
 	}
 
-	tuc.SingleCell.HideEdge(edgeOption)
+	tuc.SingleCell.CellEdge = tuc.SingleCell.HideEdge(edgeOption)
+	return tuc
 }
 
-func (tuc *TaggedUnionCell) MaxLineWidth() int {
+func (tuc TaggedUnionCell) MaxLineWidth() float64 {
 	if tuc.MergedCell != nil {
 		return tuc.MergedCell.MaxLineWidth()
 	}
@@ -354,13 +365,13 @@ func (tuc *TaggedUnionCell) MaxLineWidth() int {
 	return tuc.SingleCell.MaxLineWidth()
 }
 
-func (tuc *TaggedUnionCell) WidthForFpdf() float64 {
+func (tuc TaggedUnionCell) WidthForFpdf() float64 {
 	topLeft := tuc.TopLeftCorner()
 	bottomRight := tuc.BottomRightCorner()
-	return float64(bottomRight.X - topLeft.X)
+	return bottomRight.X - topLeft.X
 }
 
-func (tuc *TaggedUnionCell) HeightForFpdf() float64 {
+func (tuc TaggedUnionCell) HeightForFpdf() float64 {
 	topLeft := tuc.TopLeftCorner()
 	bottomRight := tuc.BottomRightCorner()
 
@@ -371,12 +382,16 @@ func (tuc *TaggedUnionCell) HeightForFpdf() float64 {
 		}
 	}
 
-	return float64(bottomRight.Y-topLeft.Y) / float64(line)
+	return (bottomRight.Y - topLeft.Y) / float64(line)
 }
 
+//	type TableObject struct {
+//		ID string
+//		CellMap map[string]TaggedUnionCell
+//	}
 type CellMap map[string]TaggedUnionCell
 
-func MakeCellMap(XList, widths, YList, heights []int, lineWidth int) CellMap {
+func MakeCellMap(XList, widths, YList, heights []float64, lineWidth float64) CellMap {
 	cm := make(map[string]TaggedUnionCell)
 	for i := 0; i < len(XList); i++ {
 		for j := 0; j < len(YList); j++ {
@@ -419,9 +434,26 @@ func (cm CellMap) HideEdge(cellName, edgeToHide string) {
 		}
 	}
 
-	cellVal.HideEdge(edgeToHide)
+	cellVal = cellVal.HideEdge(edgeToHide)
 
 	cm[cellVal.Name()] = cellVal
+}
+
+func (cm CellMap) Translation(x, y float64) CellMap {
+	ncm := make(map[string]TaggedUnionCell)
+
+	for k, tuc := range cm {
+		if tuc.MergedCell != nil {
+			tuc.MergedCell.CellEdge = tuc.MergedCell.Translation(x, y)
+			ncm[k] = tuc
+			continue
+		}
+
+		tuc.SingleCell.CellEdge = tuc.SingleCell.Translation(x, y)
+		ncm[k] = tuc
+	}
+
+	return ncm
 }
 
 func (cm CellMap) AddTextConfig(cellName string, textConfigToAdd textconfig.TextConfig) {

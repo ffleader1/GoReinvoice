@@ -95,8 +95,12 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 
 		switch elem.ToElemType(e.Type) {
 		case elem.Table:
-			tableData := pd.pdfData.Tables[e.ID]
-			mergedCell, err := tablegen.GenerateCellMap(e.X, e.Y, int(e.Width), int(e.Height), e.StrokeWidth, tableData)
+			tableData, found := pd.pdfData.Tables[e.ID]
+			if !found {
+				log.Println(errors.New("table data config not found"))
+				continue
+			}
+			mergedCell, err := tablegen.GenerateCellMap(e.X, e.Y, e.Width, e.Height, e.StrokeWidth, tableData)
 			if err != nil {
 				log.Fatal(err)
 				return
@@ -106,13 +110,12 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 				font, style := pd.SwitchFont(cell.FontFamily)
 				pdf.SetFont(font, style, float64(cell.FontSize))
 
-				pdf.SetXY(float64(topLeft.X), float64(topLeft.Y))
+				pdf.SetXY(topLeft.X, topLeft.Y)
 				pdf.MultiCell(cell.WidthForFpdf(), cell.HeightForFpdf(), cell.TextWithPlaceholder(placeHolderMap), cell.CardinalString(),
 					cell.AlignmentString(), false)
 			}
 
 		case elem.Image:
-			var file inputdata.File
 			file, found := pd.pdfData.Files[e.ID]
 			if !found {
 				log.Println(errors.New("file config not found"))
@@ -124,14 +127,14 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 				continue
 			}
 			pdf.RegisterImageOptionsReader(imageObject.Name, imageObject.FpdfOption, &imageObject.Buffer)
-			pdf.Image(imageObject.Name, float64(imageObject.X), float64(imageObject.Y), imageObject.WidthForFpdf(), imageObject.HeightForFpdf(), false, "", 0, "")
+			pdf.Image(imageObject.Name, imageObject.X, imageObject.Y, imageObject.WidthForFpdf(), imageObject.HeightForFpdf(), false, "", 0, "")
 		case elem.Text:
 			textObject := textgen.GenerateTextObject(e.X, e.Y, e.Width, e.Height, e.Text, e.FontSize, e.FontFamily, e.TextAlign, e.VerticalAlign, false)
 
 			font, style := pd.SwitchFont(textObject.FontFamily)
 			pdf.SetFont(font, style, float64(textObject.FontSize))
 
-			pdf.SetXY(float64(textObject.TopLeftCorner.X), float64(textObject.TopLeftCorner.Y))
+			pdf.SetXY(textObject.TopLeftCorner.X, textObject.TopLeftCorner.Y)
 
 			pdf.MultiCell(textObject.WidthForFpdf(), textObject.HeightForFpdf(), textObject.TextWithPlaceholder(placeHolderMap), textObject.BorderString(),
 				textObject.AlignmentString(), false)
@@ -139,18 +142,19 @@ func (pd *PdfData) GenPdf(placeHolderMap map[string]string, outputFile string) {
 		case elem.Code128, elem.Qrcode:
 			codeObject, err := codegen.GenerateCodeObject(e.Type, e.Text, e.X, e.Y, placeHolderMap)
 			if err != nil {
+				log.Println(err)
 				continue
 			}
 			pdf.RegisterImageOptionsReader(codeObject.Name, codeObject.FpdfOption, &codeObject.Buffer)
-			pdf.Image(codeObject.Name, float64(e.X), float64(e.Y), e.Width, e.Height, false, "", 0, "")
+			pdf.Image(codeObject.Name, e.X, e.Y, e.Width, e.Height, false, "", 0, "")
 		case elem.Line:
 			lineObject, err := basicshapegen.GenerateLineObject(e.X, e.Y, e.Points, e.StrokeWidth, pd.pdfDefaultStrokeWidth)
 			if err != nil {
 				log.Println(err)
 				continue
 			}
-			pdf.SetLineWidth(lineObject.LineWidth)
-			pdf.Line(lineObject.StartX, lineObject.StartY, lineObject.EndX, lineObject.EndY)
+			pdf.SetLineWidth(lineObject.Width)
+			pdf.Line(lineObject.A.X, lineObject.A.Y, lineObject.B.X, lineObject.B.Y)
 		case elem.Ellipse:
 			ellipseObject := basicshapegen.GenerateEllipseObject(e.X, e.Y, e.Width, e.Height, e.StrokeWidth, pd.pdfDefaultStrokeWidth, e.Angle)
 			pdf.SetLineWidth(ellipseObject.LineWidth)

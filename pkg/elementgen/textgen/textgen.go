@@ -2,21 +2,21 @@ package textgen
 
 import (
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/direction"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/fpdfpoint"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/textconfig"
-	"github.com/ffleader1/GoReinvoice/pkg/elementgen/resuable/pointgen"
 )
 
 type TextObject struct {
-	TopLeftCorner pointgen.Point
+	TopLeftCorner fpdfpoint.Point
 	Width         float64
 	Height        float64
 	DisplayBorder bool
 	textconfig.TextConfig
 }
 
-func GenerateTextObject(x, y int, width float64, height float64, text string, fontSize, fontFamily int, hAlign, vAlign string, displayBorder bool) TextObject {
+func GenerateTextObject(x, y, width, height float64, text string, fontSize, fontFamily int, hAlign, vAlign string, displayBorder bool) TextObject {
 	return TextObject{
-		TopLeftCorner: pointgen.Point{X: x,
+		TopLeftCorner: fpdfpoint.Point{X: x,
 			Y: y},
 		Width:         width,
 		Height:        height,
@@ -31,10 +31,6 @@ func GenerateTextObject(x, y int, width float64, height float64, text string, fo
 	}
 }
 
-//func (to TextObject) AlignmentString() string {
-//	return to.HorizontalAlignment.String() + to.VerticalAlignment.String()
-//}
-
 func (to TextObject) WidthForFpdf() float64 {
 	return to.Width
 }
@@ -47,4 +43,9 @@ func (to TextObject) BorderString() string {
 	}
 
 	return ""
+}
+
+func (to TextObject) Translation(x, y float64) TextObject {
+	to.TopLeftCorner = to.TopLeftCorner.Translation(x, y)
+	return to
 }

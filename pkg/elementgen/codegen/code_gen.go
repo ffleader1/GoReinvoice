@@ -8,6 +8,7 @@ import (
 	"github.com/boombuler/barcode/code128"
 	"github.com/boombuler/barcode/qr"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/elem"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/fpdfpoint"
 	"github.com/ffleader1/GoReinvoice/pkg/customtypes/textconfig"
 	"github.com/go-pdf/fpdf"
 	"image/png"
@@ -18,11 +19,10 @@ type CodeObject struct {
 	Content    string
 	FpdfOption fpdf.ImageOptions
 	Buffer     bytes.Buffer
-	X          int
-	Y          int
+	fpdfpoint.Point
 }
 
-func GenerateCodeObject(codeType string, data string, x, y int, placeHolderMap map[string]string) (CodeObject, error) {
+func GenerateCodeObject(codeType string, data string, x, y float64, placeHolderMap map[string]string) (CodeObject, error) {
 	var qrCode barcode.Barcode
 	var err error
 	textCfg := textconfig.TextConfig{
@@ -61,6 +61,14 @@ func GenerateCodeObject(codeType string, data string, x, y int, placeHolderMap m
 			ImageType: "png",
 		},
 		Buffer: buffer,
-		X:      x,
-		Y:      y}, nil
+		Point: fpdfpoint.Point{
+			X: x,
+			Y: y,
+		},
+	}, nil
+}
+
+func (co CodeObject) Translation(x, y float64) CodeObject {
+	co.Point = co.Point.Translation(x, y)
+	return co
 }

@@ -17,7 +17,7 @@ type TableLine struct {
 	Strokewidth int
 }
 
-func GenerateCellMap(x, y, width, height, lineWidth int, tableExtra inputdata.Table) (CellMap, error) {
+func GenerateCellMap(x, y, width, height, lineWidth float64, tableExtra inputdata.Table) (CellMap, error) {
 	sumCol := .0
 	sumRow := .0
 
@@ -65,12 +65,12 @@ func GenerateCellMap(x, y, width, height, lineWidth int, tableExtra inputdata.Ta
 	return cellMap, nil
 }
 
-func genLocationAndLength(s, l int, ratio []float64) ([]int, []int) {
-	lengths := make([]int, 0)
+func genLocationAndLength(s, l float64, ratio []float64) ([]float64, []float64) {
+	lengths := make([]float64, 0)
 	for _, r := range ratio {
-		lengths = append(lengths, int(math.Round(float64(l)*r)))
+		lengths = append(lengths, math.Round(l*r))
 	}
-	starts := []int{s}
+	starts := []float64{s}
 	for idx, ll := range lengths {
 		if idx < len(lengths)-1 {
 			starts = append(starts, starts[idx]+ll)

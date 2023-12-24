@@ -18,15 +18,15 @@ type PdfInput struct {
 type Element struct {
 	ID              string        `json:"id" yaml:"id"`
 	Type            string        `json:"type" yaml:"type"`
-	X               int           `json:"x" yaml:"x"`
-	Y               int           `json:"y" yaml:"y"`
+	X               float64       `json:"x" yaml:"x"`
+	Y               float64       `json:"y" yaml:"y"`
 	Width           float64       `json:"width" yaml:"width"`
 	Height          float64       `json:"height" yaml:"height"`
 	Angle           float64       `json:"angle" yaml:"angle"`
 	StrokeColor     string        `json:"strokeColor" yaml:"strokeColor"`
 	BackgroundColor string        `json:"backgroundColor" yaml:"backgroundColor"`
 	FillStyle       string        `json:"fillStyle" yaml:"fillStyle"`
-	StrokeWidth     int           `json:"strokeWidth" yaml:"strokeWidth"`
+	StrokeWidth     float64       `json:"strokeWidth" yaml:"strokeWidth"`
 	StrokeStyle     string        `json:"strokeStyle" yaml:"strokeStyle"`
 	Roughness       int           `json:"roughness" yaml:"roughness"`
 	Opacity         int           `json:"opacity" yaml:"opacity"`
@@ -42,14 +42,14 @@ type Element struct {
 	Link            interface{}   `json:"link" yaml:"link"`
 	Locked          bool          `json:"locked" yaml:"locked"`
 	TextConfig      `yaml:",inline"`
-	Baseline        int       `json:"baseline,omitempty" yaml:"baseline,omitempty"`
-	ContainerID     string    `json:"containerId,omitempty" yaml:"containerId,omitempty"`
-	OriginalText    string    `json:"originalText,omitempty" yaml:"originalText,omitempty"`
-	LineHeight      float64   `json:"lineHeight,omitempty" yaml:"lineHeight,omitempty"`
-	Status          string    `json:"status,omitempty" yaml:"status,omitempty"`
-	FileID          string    `json:"fileId,omitempty" yaml:"fileId,omitempty"`
-	Scale           []float64 `json:"scale,omitempty" yaml:"scale,omitempty"`
-	Points          [][]int   `json:"points,omitempty" yaml:"points,omitempty"`
+	Baseline        int         `json:"baseline,omitempty" yaml:"baseline,omitempty"`
+	ContainerID     string      `json:"containerId,omitempty" yaml:"containerId,omitempty"`
+	OriginalText    string      `json:"originalText,omitempty" yaml:"originalText,omitempty"`
+	LineHeight      float64     `json:"lineHeight,omitempty" yaml:"lineHeight,omitempty"`
+	Status          string      `json:"status,omitempty" yaml:"status,omitempty"`
+	FileID          string      `json:"fileId,omitempty" yaml:"fileId,omitempty"`
+	Scale           []float64   `json:"scale,omitempty" yaml:"scale,omitempty"`
+	Points          [][]float64 `json:"points,omitempty" yaml:"points,omitempty"`
 }
 
 type File struct {

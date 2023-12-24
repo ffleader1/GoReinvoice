@@ -3,6 +3,7 @@ package imagegen
 import (
 	"bytes"
 	"fmt"
+	"github.com/ffleader1/GoReinvoice/pkg/customtypes/fpdfpoint"
 	"github.com/ffleader1/GoReinvoice/pkg/utils"
 	"github.com/go-pdf/fpdf"
 	"image"
@@ -14,18 +15,17 @@ import (
 )
 
 type ImageObject struct {
-	Name               string
-	FpdfOption         fpdf.ImageOptions
-	Buffer             bytes.Buffer
-	X                  int
-	Y                  int
+	Name       string
+	FpdfOption fpdf.ImageOptions
+	Buffer     bytes.Buffer
+	fpdfpoint.Point
 	Width              float64
 	DefaultScaleWidth  float64
 	Height             float64
 	DefaultScaleHeight float64
 }
 
-func GenerateImageObject(imageUlr string, x, y int, width, height float64, scale []float64) (ImageObject, error) {
+func GenerateImageObject(imageUlr string, x, y, width, height float64, scale []float64) (ImageObject, error) {
 	var option fpdf.ImageOptions
 
 	file, err := os.Open(imageUlr)
@@ -58,11 +58,13 @@ func GenerateImageObject(imageUlr string, x, y int, width, height float64, scale
 		return ImageObject{}, fmt.Errorf("invalid scale")
 	}
 	return ImageObject{
-		Name:               utils.RandStringBytes(6),
-		FpdfOption:         option,
-		Buffer:             buf,
-		X:                  x,
-		Y:                  y,
+		Name:       utils.RandStringBytes(6),
+		FpdfOption: option,
+		Buffer:     buf,
+		Point: fpdfpoint.Point{
+			X: x,
+			Y: y,
+		},
 		Width:              width,
 		DefaultScaleWidth:  scale[0],
 		Height:             height,
@@ -90,4 +92,9 @@ func (io ImageObject) HeightForFpdf(scale ...float64) float64 {
 		sc *= s
 	}
 	return io.Height * sc
+}
+
+func (io ImageObject) Translation(x, y float64) ImageObject {
+	io.Point = io.Point.Translation(x, y)
+	return io
 }
