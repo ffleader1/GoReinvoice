@@ -1,6 +1,9 @@
 package pdfdata
 
-import "github.com/ffleader1/GoReinvoice/pkg/pdfgen"
+import (
+	"bytes"
+	"github.com/ffleader1/GoReinvoice/pkg/pdfgen"
+)
 
 type PDFData struct {
 	*pdfgen.PdfData
@@ -16,4 +19,8 @@ func NewPDFDataFromFile(file string) (PDFData, error) {
 
 func (pd *PDFData) GenPDFToFile(placeHolderMap map[string]string, outputFile string) {
 	pd.PdfData.GenPdf(placeHolderMap, outputFile)
+}
+
+func (pd *PDFData) GenPDFToBuffer(placeHolderMap map[string]string) bytes.Buffer {
+	return pd.PdfData.GenPdfBuffer(placeHolderMap)
 }
